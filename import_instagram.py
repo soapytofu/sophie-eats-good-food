@@ -2,6 +2,7 @@
 """Turn an official Instagram JSON export into this site's posts.js archive."""
 
 import argparse
+import hashlib
 import json
 import re
 import shutil
@@ -81,13 +82,9 @@ def main():
             if not source.exists() or source.suffix.lower() not in {".jpg", ".jpeg", ".png", ".webp"}:
                 continue
 
-            slug_seed = make_title(caption, f"instagram-post-{len(posts)+1}").lower()
-            slug = re.sub(r"[^a-z0-9]+", "-", slug_seed).strip("-") or f"post-{len(posts)+1}"
-            destination = output_images / f"{slug}{source.suffix.lower()}"
-            counter = 2
-            while destination.exists():
-                destination = output_images / f"{slug}-{counter}{source.suffix.lower()}"
-                counter += 1
+            # Stable IDs prevent re-imports from generating duplicate newsletter announcements.
+            post_id = "ig-" + hashlib.sha256(f"{source_uri}:{timestamp}".encode()).hexdigest()[:20]
+            destination = output_images / f"{post_id}{source.suffix.lower()}"
             shutil.copy2(source, destination)
 
             title = make_title(caption, f"A good food moment #{len(posts)+1}")
@@ -95,7 +92,7 @@ def main():
             if len(excerpt) > 145:
                 excerpt = excerpt[:142].rsplit(" ", 1)[0] + "…"
             posts.append({
-                "id": slug,
+                "id": post_id,
                 "title": title,
                 "date": date,
                 "category": "story" if is_story else "restaurant",
