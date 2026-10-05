@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Sophie Eats Good Food — a journal of memorable meals, neighborhood finds, and things worth ordering twice." />
+  <title>Sophie Eats Good Food</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Gloock&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="grain"></div>
+  <header class="site-header">
+    <a class="wordmark" href="#top" aria-label="Sophie Eats Good Food home">
+      <span>Sophie Eats</span><span>Good Food</span>
+    </a>
+    <nav aria-label="Main navigation">
+      <a href="#journal">Journal</a>
+      <a href="#about">About</a>
+      <a class="instagram-link" href="https://www.instagram.com/sophieeatsgoodfood/" target="_blank" rel="noreferrer">Instagram ↗</a>
+    </nav>
+    <button class="menu-button" aria-label="Open menu" aria-expanded="false">Menu</button>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">A very hungry journal</p>
+        <h1>Good food.<br><em>No gatekeeping.</em></h1>
+        <p class="intro">The long version of what I’m eating, loving, and already planning to order again.</p>
+        <a class="circle-link" href="#journal" aria-label="Explore the journal"><span>Explore<br>the journal</span><b>↓</b></a>
+      </div>
+      <div class="hero-image-wrap">
+        <img class="hero-image" src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=1400&q=88" alt="Freshly baked pizza topped with basil" />
+        <span class="hero-sticker">Eat well<br>often ✦</span>
+        <p class="image-note">Currently craving: something crispy, something spicy.</p>
+      </div>
+    </section>
+
+    <section class="ticker" aria-label="Food philosophy">
+      <div>RESTAURANTS WORTH THE RESERVATION <span>✦</span> RECIPES WORTH THE DISHES <span>✦</span> THINGS WORTH EATING TWICE <span>✦</span></div>
+    </section>
+
+    <section class="journal" id="journal">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">From the feed</p>
+          <h2>Latest bites</h2>
+        </div>
+        <div class="journal-tools">
+          <label class="search-box">
+            <span class="sr-only">Search posts</span>
+            <input id="search" type="search" placeholder="Search the journal" />
+            <span>⌕</span>
+          </label>
+          <div class="filters" role="group" aria-label="Filter posts">
+            <button class="active" data-filter="all">All</button>
+            <button data-filter="restaurant">Out & about</button>
+            <button data-filter="recipe">At home</button>
+            <button data-filter="story">Stories</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="post-grid" id="post-grid"></div>
+      <p class="no-results" id="no-results" hidden>No crumbs found. Try another search.</p>
+    </section>
+
+    <section class="about" id="about">
+      <div class="about-photo">
+        <img src="https://images.unsplash.com/photo-1498579150354-977475b7ea0b?auto=format&fit=crop&w=1000&q=86" alt="A table filled with colorful shared plates" />
+        <span>Pull up<br>a chair</span>
+      </div>
+      <div class="about-copy">
+        <p class="eyebrow">Hello, I’m Sophie</p>
+        <h2>I think the best stories begin with, “you have to try this.”</h2>
+        <p>This is where quick scrolls become proper stories: the whole order, the little details, and the dishes I’m still thinking about days later.</p>
+        <a href="https://www.instagram.com/sophieeatsgoodfood/" target="_blank" rel="noreferrer">Follow along on Instagram <span>↗</span></a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-mark">Sophie Eats<br><em>Good Food</em></div>
+    <div><p>Made with a full heart<br>and an even fuller table.</p></div>
+    <div class="footer-links"><a href="#journal">Journal</a><a href="#about">About</a><a href="https://www.instagram.com/sophieeatsgoodfood/">Instagram ↗</a></div>
+    <p class="copyright">© <span id="year"></span> Sophie Eats Good Food</p>
+  </footer>
+
+  <dialog class="post-modal" id="post-modal">
+    <button class="modal-close" aria-label="Close article">×</button>
+    <article id="modal-content"></article>
+  </dialog>
+
+  <script src="posts.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
