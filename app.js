@@ -1,0 +1,65 @@
+const grid = document.querySelector('#post-grid');
+const search = document.querySelector('#search');
+const filterButtons = [...document.querySelectorAll('[data-filter]')];
+const modal = document.querySelector('#post-modal');
+const modalContent = document.querySelector('#modal-content');
+const noResults = document.querySelector('#no-results');
+let activeFilter = 'all';
+
+function card(post, index) {
+  return `<article class="post-card" tabindex="0" role="button" data-id="${post.id}" aria-label="Read ${post.title}">
+    <div class="card-image"><img src="${post.image}" alt="${post.alt}" loading="lazy"><span class="post-number">${String(index + 1).padStart(2, '0')}</span></div>
+    <div class="card-meta"><span>${post.categoryLabel}</span><span>${post.date}</span></div>
+    <h3 class="card-title">${post.title}</h3>
+    <p class="card-excerpt">${post.excerpt}</p>
+    <span class="read-more">Read the story ↗</span>
+  </article>`;
+}
+
+function render() {
+  const query = search.value.trim().toLowerCase();
+  const posts = window.POSTS.filter(post => {
+    const inFilter = activeFilter === 'all' || post.category === activeFilter;
+    const inSearch = `${post.title} ${post.caption} ${post.location}`.toLowerCase().includes(query);
+    return inFilter && inSearch;
+  });
+  grid.innerHTML = posts.map(card).join('');
+  noResults.hidden = posts.length > 0;
+}
+
+function openPost(id) {
+  const post = window.POSTS.find(item => item.id === id);
+  if (!post) return;
+  modalContent.innerHTML = `<img class="modal-hero" src="${post.image}" alt="${post.alt}">
+    <div class="modal-body"><p class="eyebrow">${post.categoryLabel}</p><h1>${post.title}</h1>
+    <p class="modal-meta">${post.date} &nbsp;✦&nbsp; ${post.location}</p>
+    <div class="caption">${post.caption}</div>
+    <a class="modal-source" href="${post.instagramUrl}" target="_blank" rel="noreferrer">See the original on Instagram ↗</a></div>`;
+  modal.showModal();
+  document.body.classList.add('modal-open');
+}
+
+grid.addEventListener('click', event => {
+  const article = event.target.closest('.post-card');
+  if (article) openPost(article.dataset.id);
+});
+grid.addEventListener('keydown', event => {
+  if ((event.key === 'Enter' || event.key === ' ') && event.target.matches('.post-card')) { event.preventDefault(); openPost(event.target.dataset.id); }
+});
+search.addEventListener('input', render);
+filterButtons.forEach(button => button.addEventListener('click', () => {
+  activeFilter = button.dataset.filter;
+  filterButtons.forEach(item => item.classList.toggle('active', item === button));
+  render();
+}));
+document.querySelector('.modal-close').addEventListener('click', () => modal.close());
+modal.addEventListener('click', event => { if (event.target === modal) modal.close(); });
+modal.addEventListener('close', () => document.body.classList.remove('modal-open'));
+document.querySelector('.menu-button').addEventListener('click', event => {
+  const nav = document.querySelector('nav');
+  const isOpen = nav.classList.toggle('open');
+  event.currentTarget.setAttribute('aria-expanded', isOpen);
+});
+document.querySelectorAll('nav a').forEach(link => link.addEventListener('click', () => document.querySelector('nav').classList.remove('open')));
+document.querySelector('#year').textContent = new Date().getFullYear();
+render();
