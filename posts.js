@@ -1,0 +1,82 @@
+// Replace these entries with the exact captions and media from your Instagram export.
+// The site will automatically turn every object in this array into a journal article.
+window.POSTS = [
+  {
+    id: "summer-pasta",
+    title: "The summer pasta I can’t stop thinking about",
+    date: "June 12, 2026",
+    category: "restaurant",
+    categoryLabel: "Out & about",
+    location: "San Francisco, CA",
+    image: "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=1200&q=87",
+    alt: "Pasta with parmesan and fresh herbs",
+    excerpt: "Silky pasta, a reckless amount of parmesan, and the kind of sauce you chase around the plate with bread.",
+    caption: "Silky pasta, a reckless amount of parmesan, and the kind of sauce you chase around the plate with bread.\n\nThe noodles had exactly the right amount of bite, but the real star was that bright, glossy sauce. We ordered one for the table and immediately wished we hadn’t shared.",
+    instagramUrl: "https://www.instagram.com/sophieeatsgoodfood/"
+  },
+  {
+    id: "market-strawberries",
+    title: "Peak-season strawberries need almost nothing",
+    date: "June 04, 2026",
+    category: "recipe",
+    categoryLabel: "At home",
+    location: "Sophie’s kitchen",
+    image: "https://images.unsplash.com/photo-1464965911861-746a04b4bca6?auto=format&fit=crop&w=1000&q=87",
+    alt: "Fresh strawberries in a bowl",
+    excerpt: "A little cream, a crack of black pepper, and the juiciest berries at the market.",
+    caption: "A little cream, a crack of black pepper, and the juiciest berries at the market.\n\nThis is less of a recipe and more of a very strong suggestion: buy the fragrant berries, serve them cold, and don’t overthink dessert.",
+    instagramUrl: "https://www.instagram.com/sophieeatsgoodfood/"
+  },
+  {
+    id: "perfect-sandwich",
+    title: "An argument for the perfect lunch sandwich",
+    date: "May 28, 2026",
+    category: "restaurant",
+    categoryLabel: "Out & about",
+    location: "Oakland, CA",
+    image: "https://images.unsplash.com/photo-1553909489-cd47e0907980?auto=format&fit=crop&w=1000&q=87",
+    alt: "A stacked vegetable sandwich",
+    excerpt: "Crunch, acid, a soft middle, and absolutely no structural collapse. This is sandwich engineering.",
+    caption: "Crunch, acid, a soft middle, and absolutely no structural collapse. This is sandwich engineering.\n\nThe bread was toasted without being scratchy, the vegetables were properly seasoned, and every bite held together. Ten out of ten—would cross town for it again.",
+    instagramUrl: "https://www.instagram.com/sophieeatsgoodfood/"
+  },
+  {
+    id: "olive-oil-cake",
+    title: "Olive oil cake, forever and always",
+    date: "May 16, 2026",
+    category: "recipe",
+    categoryLabel: "At home",
+    location: "Sophie’s kitchen",
+    image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=1000&q=87",
+    alt: "A simple golden layer cake",
+    excerpt: "Tender, citrusy, not-too-sweet—and somehow even better with coffee the next morning.",
+    caption: "Tender, citrusy, not-too-sweet—and somehow even better with coffee the next morning.\n\nI love a cake that doesn’t need a special occasion. This one keeps beautifully, travels well, and is exactly right with a cloud of barely sweetened cream.",
+    instagramUrl: "https://www.instagram.com/sophieeatsgoodfood/"
+  },
+  {
+    id: "crispy-dumplings",
+    title: "Come for the dumplings, stay for the crispy bits",
+    date: "May 02, 2026",
+    category: "restaurant",
+    categoryLabel: "Out & about",
+    location: "San Francisco, CA",
+    image: "https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=1200&q=87",
+    alt: "Steamed dumplings arranged on a plate",
+    excerpt: "Lacy-edged, juicy-centered, and gone from the plate in approximately forty seconds.",
+    caption: "Lacy-edged, juicy-centered, and gone from the plate in approximately forty seconds.\n\nWe tried to pace ourselves. We failed. The bottoms had a delicate, glassy crunch and the filling was deeply savory without feeling heavy.",
+    instagramUrl: "https://www.instagram.com/sophieeatsgoodfood/"
+  },
+  {
+    id: "breakfast-toast",
+    title: "A very good reason to make breakfast",
+    date: "April 21, 2026",
+    category: "recipe",
+    categoryLabel: "At home",
+    location: "Sophie’s kitchen",
+    image: "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=1000&q=87",
+    alt: "Toast topped with egg and vegetables",
+    excerpt: "Thick toast, jammy eggs, something green, and enough chili crisp to wake everything up.",
+    caption: "Thick toast, jammy eggs, something green, and enough chili crisp to wake everything up.\n\nNo measurements required. Toast the bread harder than you think, salt every layer, and eat it while standing at the counter if you must.",
+    instagramUrl: "https://www.instagram.com/sophieeatsgoodfood/"
+  }
+];
