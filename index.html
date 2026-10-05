@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Gloock&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css?v=2" />
 </head>
 <body>
   <div class="grain"></div>
@@ -19,6 +19,7 @@
     <nav aria-label="Main navigation">
       <a href="#journal">Journal</a>
       <a href="#about">About</a>
+      <a href="#subscribe">Subscribe</a>
       <a class="instagram-link" href="https://www.instagram.com/sophieeatsgoodfood/" target="_blank" rel="noreferrer">Instagram ↗</a>
     </nav>
     <button class="menu-button" aria-label="Open menu" aria-expanded="false">Menu</button>
@@ -68,6 +69,28 @@
       <p class="no-results" id="no-results" hidden>No crumbs found. Try another search.</p>
     </section>
 
+    <section class="newsletter" id="subscribe" aria-labelledby="newsletter-heading">
+      <div class="newsletter-copy">
+        <p class="eyebrow">A little something for your inbox</p>
+        <h2 id="newsletter-heading">Never miss<br><em>a good bite.</em></h2>
+        <p>Get a note from me whenever a new story goes up. Good food, straight to your inbox.</p>
+      </div>
+      <form class="newsletter-form" id="newsletter-form">
+        <label for="newsletter-email">Your email address</label>
+        <div class="newsletter-input-row">
+          <input id="newsletter-email" name="email" type="email" placeholder="you@example.com" autocomplete="email" maxlength="254" required aria-describedby="newsletter-note newsletter-status" />
+          <button type="submit">Count me in <span aria-hidden="true">↗</span></button>
+        </div>
+        <div class="newsletter-trap" aria-hidden="true">
+          <label for="newsletter-website">Website</label>
+          <input id="newsletter-website" name="website" tabindex="-1" autocomplete="off" />
+        </div>
+        <label class="newsletter-consent"><input type="checkbox" name="consent" required /> <span>Yes, email me when Sophie publishes a new post.</span></label>
+        <p class="newsletter-note" id="newsletter-note">Confirm your email to join. Unsubscribe anytime.</p>
+        <p class="newsletter-status" id="newsletter-status" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+
     <section class="about" id="about">
       <div class="about-photo">
         <img src="https://images.unsplash.com/photo-1498579150354-977475b7ea0b?auto=format&fit=crop&w=1000&q=86" alt="A table filled with colorful shared plates" />
@@ -85,7 +108,7 @@
   <footer>
     <div class="footer-mark">Sophie Eats<br><em>Good Food</em></div>
     <div><p>Made with a full heart<br>and an even fuller table.</p></div>
-    <div class="footer-links"><a href="#journal">Journal</a><a href="#about">About</a><a href="https://www.instagram.com/sophieeatsgoodfood/">Instagram ↗</a></div>
+    <div class="footer-links"><a href="#journal">Journal</a><a href="#about">About</a><a href="#subscribe">Subscribe</a><a href="https://www.instagram.com/sophieeatsgoodfood/">Instagram ↗</a></div>
     <p class="copyright">© <span id="year"></span> Sophie Eats Good Food</p>
   </footer>
 
@@ -95,6 +118,7 @@
   </dialog>
 
   <script src="posts.js"></script>
-  <script src="app.js"></script>
+  <script src="app.js?v=2"></script>
+  <script src="newsletter.js"></script>
 </body>
 </html>

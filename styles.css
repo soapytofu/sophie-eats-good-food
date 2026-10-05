@@ -59,6 +59,25 @@ h1 em,.footer-mark em { color:var(--red); font-weight:400; }
 .card-excerpt { font-size:14px; line-height:1.55; max-width:38ch; margin:0; color:#52564f; }
 .read-more { display:inline-block; margin-top:16px; font-size:11px; text-transform:uppercase; font-weight:600; letter-spacing:.13em; border-bottom:1px solid; }
 .no-results { padding:80px 0; text-align:center; font:30px Gloock,serif; }
+.newsletter { position:relative; display:grid; grid-template-columns:1fr 1fr; gap:7vw; align-items:center; padding:85px 7vw; background:var(--red); color:var(--cream); border-top:1px solid var(--ink); }
+.newsletter h2 { margin:0 0 22px; font-size:clamp(45px,5.7vw,84px); line-height:.95; }
+.newsletter h2 em { color:var(--lime); }
+.newsletter-copy > p:last-child { font-size:17px; line-height:1.6; max-width:37ch; }
+.newsletter-form > label:first-child { display:block; margin-bottom:12px; text-transform:uppercase; letter-spacing:.14em; font-size:11px; font-weight:600; }
+.newsletter-input-row { display:flex; border-bottom:1px solid var(--cream); padding-bottom:12px; gap:12px; }
+.newsletter-input-row input { width:100%; min-width:0; background:transparent; color:var(--cream); border:0; border-radius:0; font-size:18px; padding:12px 0; }
+.newsletter-input-row input::placeholder { color:rgba(244,240,231,.7); }
+.newsletter-input-row button { flex-shrink:0; background:var(--cream); color:var(--ink); border:0; border-radius:100px; padding:15px 20px; font-size:11px; text-transform:uppercase; letter-spacing:.08em; cursor:pointer; }
+.newsletter-input-row button:hover { background:var(--lime); }
+.newsletter-input-row button:disabled { opacity:.65; cursor:wait; }
+.newsletter-consent { display:flex; gap:9px; align-items:flex-start; margin-top:20px; font-size:12px; line-height:1.5; }
+.newsletter-consent input { accent-color:var(--ink); flex-shrink:0; margin-top:3px; }
+.newsletter-note { font-size:11px; opacity:.85; margin:10px 0 0 25px; }
+.newsletter-status { min-height:42px; font-size:14px; line-height:1.5; margin:20px 0 0; }
+.newsletter-status[data-state="error"] { padding:12px; border:1px solid var(--cream); }
+.newsletter-status[data-state="success"] { color:var(--lime); }
+.newsletter-trap { position:absolute; left:-10000px; width:1px; height:1px; overflow:hidden; }
+.newsletter input:focus-visible,.newsletter button:focus-visible { outline:2px solid var(--lime); outline-offset:4px; }
 .about { display:grid; grid-template-columns:1fr 1fr; background:var(--lime); border-top:1px solid var(--ink); border-bottom:1px solid var(--ink); }
 .about-photo { position:relative; padding:4vw; border-right:1px solid var(--ink); }
 .about-photo img { height:620px; object-fit:cover; }
@@ -87,7 +106,9 @@ footer { display:grid; grid-template-columns:2fr 1fr 1fr; gap:30px; padding:90px
   .section-heading { align-items:flex-start; flex-direction:column; } .journal-tools { width:100%; align-items:flex-start; } .search-box { width:100%; } .filters { flex-wrap:wrap; }
   .post-grid { grid-template-columns:1fr 1fr; } .post-card,.post-card:nth-child(n) { grid-column:span 1; } .post-card:nth-child(3n+1) { grid-column:span 2; } .post-card:nth-child(3n+1) .card-image { aspect-ratio:4/3; }
   .about { grid-template-columns:1fr; } .about-photo { border-right:0; border-bottom:1px solid; } .about-photo img { height:480px; } .about-copy { padding:80px 7vw; }
+  .newsletter { grid-template-columns:1fr; gap:30px; padding:70px 7vw; }
   footer { grid-template-columns:1fr 1fr; } .footer-mark { grid-column:1/-1; margin-bottom:40px; }
 }
 @media(max-width:540px){ .journal { padding:80px 18px; } .post-grid { display:block; } .post-card { margin-bottom:56px; } .post-card:nth-child(n) .card-image { aspect-ratio:4/5; } .section-heading h2 { font-size:58px; } .about-photo { padding:18px; } .about-photo img { height:400px; } footer { display:block; } footer > div { margin-bottom:35px; } }
 @media(prefers-reduced-motion:reduce){ * { scroll-behavior:auto!important; animation:none!important; transition:none!important; } }
+@media(max-width:380px){ .newsletter-input-row { flex-direction:column; } .newsletter-input-row button { align-self:flex-start; } }
