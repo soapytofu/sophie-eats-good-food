@@ -5,29 +5,34 @@ const modal = document.querySelector('#post-modal');
 const modalContent = document.querySelector('#modal-content');
 const noResults = document.querySelector('#no-results');
 let activeFilter = 'all';
+const journalPosts = [...window.POSTS].sort((a, b) => (Date.parse(b.date) || 0) - (Date.parse(a.date) || 0));
 
 function escapeHtml(value) {
   return String(value ?? '').replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character]));
 }
 
-function card(post, index) {
-  return `<article class="post-card" tabindex="0" role="button" data-id="${escapeHtml(post.id)}" aria-label="Read ${escapeHtml(post.title)}">
-    <div class="card-image"><img src="${escapeHtml(post.image)}" alt="${escapeHtml(post.alt)}" loading="lazy"><span class="post-number">${String(index + 1).padStart(2, '0')}</span></div>
-    <div class="card-meta"><span>${escapeHtml(post.categoryLabel)}</span><span>${escapeHtml(post.date)}</span></div>
-    <h3 class="card-title">${escapeHtml(post.title)}</h3>
-    <p class="card-excerpt">${escapeHtml(post.excerpt)}</p>
-    <span class="read-more">Read the story ↗</span>
+function journalEntry(post) {
+  const link = `#post=${encodeURIComponent(post.id)}`;
+  const paragraphs = String(post.caption || post.excerpt || '').split(/\n\s*\n/).filter(Boolean).slice(0, 2);
+  const minutes = Math.max(1, Math.ceil(String(post.caption || '').split(/\s+/).length / 220));
+  return `<article class="journal-entry">
+    <p class="entry-date">${escapeHtml(post.date)} <span aria-hidden="true">·</span> ${escapeHtml(post.categoryLabel)}</p>
+    <h3 class="entry-title"><a href="${link}">${escapeHtml(post.title)}</a></h3>
+    <p class="entry-meta">By Sophie <span aria-hidden="true">·</span> ${minutes} min read${post.location ? ` <span aria-hidden="true">·</span> ${escapeHtml(post.location)}` : ''}</p>
+    <a class="entry-image" href="${link}" aria-label="Read ${escapeHtml(post.title)}"><img src="${escapeHtml(post.image)}" alt="${escapeHtml(post.alt)}" loading="lazy"></a>
+    <div class="entry-body">${paragraphs.map(paragraph => `<p>${escapeHtml(paragraph)}</p>`).join('')}</div>
+    <a class="read-more" href="${link}">Continue reading <span aria-hidden="true">→</span></a>
   </article>`;
 }
 
 function render() {
   const query = search.value.trim().toLowerCase();
-  const posts = window.POSTS.filter(post => {
+  const posts = journalPosts.filter(post => {
     const inFilter = activeFilter === 'all' || post.category === activeFilter;
     const inSearch = `${post.title} ${post.caption} ${post.location}`.toLowerCase().includes(query);
     return inFilter && inSearch;
   });
-  grid.innerHTML = posts.map(card).join('');
+  grid.innerHTML = posts.map(journalEntry).join('');
   noResults.hidden = posts.length > 0;
 }
 
@@ -44,17 +49,13 @@ function openPost(id) {
   document.body.classList.add('modal-open');
 }
 
-grid.addEventListener('click', event => {
-  const article = event.target.closest('.post-card');
-  if (article) openPost(article.dataset.id);
-});
-grid.addEventListener('keydown', event => {
-  if ((event.key === 'Enter' || event.key === ' ') && event.target.matches('.post-card')) { event.preventDefault(); openPost(event.target.dataset.id); }
-});
 search.addEventListener('input', render);
 filterButtons.forEach(button => button.addEventListener('click', () => {
   activeFilter = button.dataset.filter;
-  filterButtons.forEach(item => item.classList.toggle('active', item === button));
+  filterButtons.forEach(item => {
+    item.classList.toggle('active', item === button);
+    item.setAttribute('aria-pressed', item === button);
+  });
   render();
 }));
 document.querySelector('.modal-close').addEventListener('click', () => modal.close());
@@ -68,9 +69,13 @@ document.querySelector('.menu-button').addEventListener('click', event => {
   const isOpen = nav.classList.toggle('open');
   event.currentTarget.setAttribute('aria-expanded', isOpen);
 });
-document.querySelectorAll('nav a').forEach(link => link.addEventListener('click', () => document.querySelector('nav').classList.remove('open')));
+document.querySelectorAll('nav a').forEach(link => link.addEventListener('click', () => {
+  document.querySelector('nav').classList.remove('open');
+  document.querySelector('.menu-button').setAttribute('aria-expanded', 'false');
+}));
 document.querySelector('#year').textContent = new Date().getFullYear();
 render();
+document.querySelector('#recent-posts').innerHTML = journalPosts.slice(0, 3).map(post => `<li><a href="#post=${encodeURIComponent(post.id)}">${escapeHtml(post.title)}</a><span>${escapeHtml(post.date)}</span></li>`).join('');
 
 function openLinkedPost() {
   if (!location.hash.startsWith('#post=')) return;
