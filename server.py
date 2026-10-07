@@ -11,7 +11,7 @@ from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlsplit, unquote
 
 from newsletter import Newsletter, ROOT
-from blog import render_post, render_page
+from blog import render_post, render_page, render_life
 
 
 def parse_trusted_proxies(value):
@@ -138,6 +138,12 @@ class BlogHandler(SimpleHTTPRequestHandler):
 
     def send_head(self):
         path = unquote(urlsplit(self.path).path)
+        if path in {"/life", "/life/", "/life.html"}:
+            try:
+                self.respond(200, render_life(), "text/html")
+            except (ValueError, OSError):
+                self.page("The album is taking a moment", "Please try again shortly.", code=503)
+            return None
         if path in {"/", "/index.html", "/about", "/about/", "/about.html"}:
             template = "about.html" if path.startswith("/about") else "index.html"
             self.respond(200, render_page(template), "text/html")
@@ -155,7 +161,7 @@ class BlogHandler(SimpleHTTPRequestHandler):
             return None
         relative = "index.html" if path == "/" else path.lstrip("/")
         target = (ROOT / relative).resolve()
-        public = {"index.html", "styles.css", "app.js", "newsletter.js", "posts.js", "companion.js", "companion.css"}
+        public = {"index.html", "styles.css", "app.js", "newsletter.js", "posts.js", "companion.js", "companion.css", "gallery.css", "gallery.js"}
         image = relative.startswith("images/") and target.suffix.lower() in {".jpg", ".jpeg", ".png", ".webp", ".gif", ".avif"}
         if not target.is_relative_to(ROOT) or (relative not in public and not image) or not target.is_file():
             self.send_error(404)

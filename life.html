@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Life’s snippets — a small photo journal of the moments outside Sophie’s food journal.">
+  <title>Life’s snippets — Sophie Eats Good Food</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500&family=DM+Sans:wght@400;500;600&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css?v=6">
+  <link rel="stylesheet" href="/gallery.css?v=1">
+</head>
+<body class="life-page">
+  <div class="grain"></div>
+  <header class="site-header">
+    <a class="wordmark" href="/" aria-label="Sophie Eats Good Food home"><span>Sophie Eats</span> <span>Good Food</span></a>
+    <nav class="article-nav" aria-label="Main navigation"><a href="/#journal">My journal</a><a href="/life" aria-current="page">Life’s snippets</a><a href="/about">About me</a><a href="/#subscribe">Subscribe</a></nav>
+  </header>
+  <main class="life-main">
+    <header class="life-heading">
+      <div><p class="eyebrow">Outside the food journal</p><h1>Life’s <em>snippets.</em></h1><p class="life-intro">Little moments, places, and things I want to remember.</p></div>
+      <p class="life-count">$count</p>
+    </header>
+    $gallery
+    <p class="life-signoff">A little life, in between. <span>Sophie x</span></p>
+  </main>
+  $footer
+  <dialog class="life-lightbox" id="life-lightbox" aria-label="Life’s snippets photo viewer">
+    <button type="button" class="life-lightbox-close" aria-label="Close photo">×</button>
+    <figure><img class="life-lightbox-image" alt=""><figcaption class="life-lightbox-caption"></figcaption></figure>
+    <div class="life-lightbox-controls"><button type="button" data-gallery-prev aria-label="Previous photo">←</button><p class="life-lightbox-counter" role="status" aria-live="polite"></p><button type="button" data-gallery-next aria-label="Next photo">→</button></div>
+  </dialog>
+  <script src="/gallery.js?v=1"></script>
+</body>
+</html>

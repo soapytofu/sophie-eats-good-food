@@ -1,0 +1,42 @@
+/* A quiet album: original photo proportions, optional notes, no card chrome. */
+.life-main { max-width:1050px; margin:60px auto 72px; padding:0 24px; }
+.life-heading { display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:end; gap:24px; margin-bottom:42px; }
+.life-heading h1 { font-size:clamp(40px,4.7vw,58px); }
+.life-heading .eyebrow { margin-bottom:16px; }
+.life-intro { font:16px/1.8 var(--serif); color:var(--muted); margin:20px 0 0; max-width:46ch; }
+.life-count { color:var(--muted); font-size:11px; margin:0 0 5px; white-space:nowrap; }
+.life-gallery { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:46px 32px; align-items:start; }
+.life-photo { margin:0; min-width:0; }
+.life-photo-open { display:block; width:100%; border:0; background:none; padding:0; cursor:zoom-in; }
+.life-photo-open img { height:auto; }
+.life-photo figcaption { display:flex; flex-wrap:wrap; justify-content:space-between; gap:5px 20px; margin-top:13px; color:var(--muted); font:12px/1.7 "DM Sans",sans-serif; overflow-wrap:anywhere; }
+.life-photo-date { font-size:11px; }
+.life-empty { display:grid; justify-items:center; text-align:center; padding:48px 24px; border-top:1px solid var(--line); border-bottom:1px solid var(--line); color:var(--muted); }
+.life-empty svg { margin-bottom:20px; color:var(--sage); opacity:.75; }
+.life-empty h2 { font-size:22px; line-height:1.4; margin:0 0 10px; color:var(--ink); }
+.life-empty p { font-size:13px; line-height:1.8; margin:0; }
+.life-signoff { display:flex; align-items:center; justify-content:space-between; gap:16px; color:var(--muted); font-size:12px; margin:32px 0 0; }
+.life-signoff span { font:29px/1.3 "Caveat",cursive; color:var(--sage); }
+.life-lightbox { width:min(920px,calc(100vw - 32px)); max-height:calc(100vh - 32px); border:0; padding:42px 26px 18px; background:var(--cream); color:var(--ink); }
+.life-lightbox::backdrop { background:rgba(35,39,32,.65); }
+.life-lightbox figure { margin:0; }
+.life-lightbox-image { width:auto; max-width:100%; max-height:70vh; object-fit:contain; margin:auto; }
+.life-lightbox-caption { text-align:center; color:var(--muted); font:13px/1.7 "DM Sans",sans-serif; margin-top:16px; overflow-wrap:anywhere; }
+.life-lightbox-close { position:absolute; top:5px; right:10px; border:0; padding:0; width:32px; height:32px; font-size:26px; color:var(--muted); background:none; cursor:pointer; }
+.life-lightbox-controls { display:grid; grid-template-columns:40px 1fr 40px; align-items:center; gap:12px; margin-top:18px; }
+.life-lightbox-controls button { border:1px solid var(--line); background:none; color:var(--ink); width:40px; height:36px; cursor:pointer; }
+.life-lightbox-controls button[hidden] { display:none; }
+.life-lightbox-counter { grid-column:2; text-align:center; font-size:12px; color:var(--muted); margin:0; }
+body:has(.life-lightbox[open]) { overflow:hidden; }
+@media(max-width:580px) {
+  .life-main { margin:36px auto 50px; }
+  .life-heading { gap:16px; margin-bottom:30px; }
+  .life-heading h1 { font-size:40px; }
+  .life-intro { font-size:15px; }
+  .life-count { align-self:start; margin-top:3px; }
+  .life-gallery { grid-template-columns:1fr; gap:36px; }
+  .life-empty { padding:38px 16px; }
+  .life-empty h2 { font-size:20px; }
+  .life-lightbox { padding:40px 16px 18px; }
+  .life-lightbox-image { max-height:65vh; }
+}

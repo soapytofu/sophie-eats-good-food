@@ -1,6 +1,7 @@
 """Render complete, shareable journal pages without requiring JavaScript."""
 
 import html
+import json
 import math
 import re
 from datetime import datetime
@@ -31,6 +32,44 @@ def render_footer():
 
 def render_page(template, **values):
     return Template((ROOT / template).read_text(encoding="utf-8")).substitute(footer=render_footer(), **values)
+
+
+def render_life(photos=None):
+    """A separate photo collection: never seed it with the food archive or stock images."""
+    if photos is None:
+        photos = json.loads((ROOT / "life.json").read_text(encoding="utf-8"))
+    if not isinstance(photos, list):
+        raise ValueError("life.json must contain a list of photos.")
+    figures = []
+    for photo in photos:
+        if not isinstance(photo, dict):
+            continue
+        source = image_url(photo.get("image"))
+        if not source:
+            continue
+        alt = photo.get("alt") or photo.get("caption") or "A moment from life"
+        caption, date = photo.get("caption"), photo.get("date")
+        details = []
+        if caption:
+            details.append(f'<span>{escape(caption)}</span>')
+        if date:
+            details.append(f'<span class="life-photo-date">{escape(date)}</span>')
+        note = f'<figcaption>{"".join(details)}</figcaption>' if details else ""
+        loading = ' loading="lazy"' if figures else ''
+        figures.append(f'''<figure class="life-photo">
+          <button type="button" class="life-photo-open" data-gallery-photo aria-label="Enlarge photo: {escape(alt)}">
+            <img src="{escape(source)}" alt="{escape(alt)}"{loading} decoding="async">
+          </button>{note}</figure>''')
+    if figures:
+        gallery = f'<section class="life-gallery" aria-label="Life photos">{"".join(figures)}</section>'
+    else:
+        gallery = '''<section class="life-empty" aria-labelledby="life-empty-heading">
+          <svg viewBox="0 0 80 64" width="80" height="64" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><rect x="13" y="12" width="54" height="40" rx="2"/><circle cx="52" cy="24" r="4"/><path d="m18 46 15-18 12 13 8-8 9 13"/></svg>
+          <h2 id="life-empty-heading">A little collection, coming soon.</h2>
+          <p>This album is waiting for its first photos.</p>
+        </section>'''
+    count = f'{len(figures)} photo' + ('' if len(figures) == 1 else 's')
+    return render_page("life.html", gallery=gallery, count=count)
 
 
 def render_post(post, posts):

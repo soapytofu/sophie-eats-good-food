@@ -149,7 +149,7 @@ footer > div > p { font-size:12px; line-height:1.8; margin:12px 0 0; }
 @media(max-width:1220px) { .site-header,footer { margin-left:32px; margin-right:32px; } .newsletter { margin-left:24px; margin-right:24px; } }
 @media(max-width:850px) {
   .article-nav { display:flex; position:static; flex-direction:row; flex-wrap:wrap; padding:0; border:0; font-size:11px; gap:12px; }
-  .article-page .site-header,.about-page .site-header,.status-page .site-header { flex-wrap:wrap; padding:18px 0; gap:12px; }
+  .article-page .site-header,.about-page .site-header,.status-page .site-header,.life-page .site-header { flex-wrap:wrap; padding:18px 0; gap:12px; }
   .entry-navigation { position:static; display:flex; background:none; flex-direction:row; }
   .site-header { min-height:80px; margin:0 24px; position:relative; }
   .wordmark { font-size:21px; }
