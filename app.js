@@ -7,7 +7,11 @@ const browseValueLabel = document.querySelector('#browse-value-label');
 const browseValueField = document.querySelector('#browse-value-field');
 const resultCount = document.querySelector('#result-count');
 const resetBrowse = document.querySelector('#reset-browse');
-const journalPosts = [...window.POSTS].sort((a, b) => (Date.parse(b.date) || 0) - (Date.parse(a.date) || 0));
+const volumeBy = document.querySelector('#volume-by');
+const volumeValue = document.querySelector('#volume-value');
+const volumeField = document.querySelector('#volume-value-field');
+const volumeCaption = document.querySelector('#volume-caption');
+const journalPosts = [...window.POSTS].sort((a, b) => window.JournalFilters.dateOrder(b) - window.JournalFilters.dateOrder(a));
 
 function escapeHtml(value) {
   return String(value ?? '').replace(/[&<>"']/g, character => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character]));
@@ -31,11 +35,15 @@ function journalEntry(post) {
 function render() {
   const posts = window.JournalFilters.filterPosts(journalPosts, {
     query: search.value, mode: browseBy.value, value: browseValue.value,
+    volumeMode: volumeBy.value, volumeValue: volumeValue.value,
   });
   grid.innerHTML = posts.map(journalEntry).join('');
   noResults.hidden = posts.length > 0;
-  resultCount.textContent = `${posts.length} of ${journalPosts.length} ${journalPosts.length === 1 ? 'entry' : 'entries'}`;
-  resetBrowse.hidden = !search.value && browseBy.value === 'all';
+  const selectedVolume = window.JournalFilters.volumes(journalPosts, volumeBy.value).find(choice => choice.value === volumeValue.value);
+  resultCount.textContent = `${posts.length} of ${journalPosts.length} ${journalPosts.length === 1 ? 'entry' : 'entries'}${selectedVolume ? ` · ${selectedVolume.label}` : ''}`;
+  volumeCaption.hidden = !selectedVolume;
+  volumeCaption.textContent = selectedVolume ? `Volume · ${selectedVolume.label}` : '';
+  resetBrowse.hidden = !search.value && browseBy.value === 'all' && volumeBy.value === 'all';
 }
 
 function updateBrowse() {
@@ -51,11 +59,26 @@ function updateBrowse() {
   render();
 }
 
+function updateVolumes() {
+  const mode = volumeBy.value;
+  const names = { year: 'Year', quarter: 'Quarter', month: 'Month' };
+  volumeField.hidden = mode === 'all';
+  document.querySelector('#volume-value-label').textContent = names[mode] || 'Volume';
+  const choices = window.JournalFilters.volumes(journalPosts, mode);
+  volumeValue.innerHTML = `<option value="">All ${(names[mode] || 'volume').toLowerCase()}s</option>` + choices.map(choice =>
+    `<option value="${escapeHtml(choice.value)}">${escapeHtml(choice.label)} (${choice.count})</option>`).join('');
+  document.querySelector('#volume-note').textContent = mode !== 'all' && !choices.length ? 'No dated entries yet. All entries are shown.' : '';
+  render();
+}
+
 search.addEventListener('input', render);
 browseBy.addEventListener('change', updateBrowse);
 browseValue.addEventListener('change', render);
+volumeBy.addEventListener('change', updateVolumes);
+volumeValue.addEventListener('change', render);
 resetBrowse.addEventListener('click', () => {
-  search.value = ''; browseBy.value = 'all'; updateBrowse();
+  search.value = ''; browseBy.value = 'all'; volumeBy.value = 'all'; volumeValue.value = '';
+  updateBrowse(); updateVolumes();
   search.focus({ preventScroll: true });
 });
 document.querySelector('.menu-button').addEventListener('click', event => {
@@ -68,6 +91,7 @@ document.querySelectorAll('.site-header nav a').forEach(link => link.addEventLis
   document.querySelector('.menu-button').setAttribute('aria-expanded', 'false');
 }));
 updateBrowse();
+updateVolumes();
 document.querySelector('#recent-posts').innerHTML = journalPosts.slice(0, 3).map(post => `<li><a href="/posts/${encodeURIComponent(post.id)}">${escapeHtml(post.title)}</a><span>${escapeHtml(post.date)}</span></li>`).join('');
 
 function openLinkedPost() {
