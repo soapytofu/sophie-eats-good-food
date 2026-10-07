@@ -50,14 +50,15 @@ h1 em { color:var(--sage); }
 .entry-body p { margin:22px 0 0; white-space:pre-line; }
 .read-more { display:inline-block; margin-top:24px; color:var(--sage); font-size:12px; border-bottom:1px solid #b9c1b0; padding-bottom:4px; }
 .read-more:hover { color:var(--red); border-color:var(--red); }
-.journal-sidebar { padding-top:31px; }
+.journal-sidebar { padding-top:31px; align-self:stretch; }
+.sidebar-tools { position:sticky; top:24px; padding-top:32px; }
 .sidebar-note { text-align:center; background:#f0f1e8; padding:26px 21px 30px; border-radius:3px; }
 .author-monogram { width:63px; height:63px; display:grid; place-items:center; margin:0 auto 20px; border:1px solid #c5cdb9; border-radius:50%; color:var(--sage); font:italic 34px var(--serif); background:var(--cream); }
 .sidebar-note .eyebrow { margin-bottom:10px; font-size:9px; }
 .sidebar-note h3 { font-size:21px; line-height:1.4; margin:0 0 12px; letter-spacing:-.02em; }
 .sidebar-note > p:not(.eyebrow) { font-size:12px; line-height:1.9; color:#686e60; margin:0 0 20px; }
 .sidebar-note .text-link { font-size:11px; }
-.journal-browse { margin-top:32px; }
+.journal-browse { margin-top:0; }
 .journal-browse summary { cursor:pointer; font:17px var(--serif); }
 .search-box { display:flex; align-items:center; margin:17px 0 13px; border:1px solid var(--line); border-radius:3px; padding:9px 11px; gap:8px; background:#fffcf7; }
 .search-box input { width:100%; min-width:0; border:0; background:transparent; color:var(--ink); outline:0; font-size:12px; }
@@ -145,6 +146,7 @@ footer > div > p { font-size:11px; line-height:1.8; margin:3px 0; }
   .hero-signature { flex-wrap:wrap; gap:6px 12px; }
   .journal { grid-template-columns:1fr; gap:22px; max-width:720px; }
   .journal-sidebar { grid-row:1; padding:0; }
+  .sidebar-tools { position:static; padding-top:0; }
   .sidebar-note,.sidebar-recent,.sidebar-subscribe { display:none; }
   .journal-browse { margin:0; }
   .journal-browse summary { font-size:14px; }
@@ -193,4 +195,8 @@ footer > div > p { font-size:11px; line-height:1.8; margin:3px 0; }
   .footer-mark { font-size:19px; }
 }
 @media(max-width:350px) { h1 { font-size:37px; } .newsletter-input-row { flex-direction:column; } }
+@media(min-width:851px) and (max-height:650px) {
+  .sidebar-tools { top:12px; padding-top:16px; }
+  .sidebar-recent { display:none; }
+}
 @media(prefers-reduced-motion:reduce) { * { scroll-behavior:auto!important; transition:none!important; } }
