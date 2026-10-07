@@ -134,7 +134,7 @@ class Newsletter:
                 # Only the people subscribed at publication time receive this announcement.
                 subscribers = db.execute("SELECT * FROM subscribers WHERE confirmed IS NOT NULL").fetchall()
                 for subscriber in subscribers:
-                    link = f"{self.site_url}/#post={quote(post['id'], safe='')}"
+                    link = f"{self.site_url}/posts/{quote(post['id'], safe='')}"
                     unsubscribe = f"{self.site_url}/newsletter/unsubscribe?token={quote(subscriber['token'])}"
                     title, excerpt = str(post.get("title", "A new story")), str(post.get("excerpt", ""))
                     payload = {

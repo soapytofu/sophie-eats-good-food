@@ -55,7 +55,7 @@ class NewsletterTests(unittest.TestCase):
             restarted.deliver()
             restarted.deliver()
         self.assertEqual(len(self.sent), 1)
-        self.assertIn("/#post=new-post", json.loads(self.sent[0][0]["payload"])["text"])
+        self.assertIn("/posts/new-post", json.loads(self.sent[0][0]["payload"])["text"])
 
     def test_unsubscribe_cancels_queued_email(self):
         row = self.signup()
