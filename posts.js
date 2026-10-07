@@ -3,6 +3,8 @@
 window.POSTS = [
   {
     id: "summer-pasta",
+    foods: ["Pasta"],
+    topics: ["Restaurant discoveries"],
     title: "The summer pasta I can’t stop thinking about",
     date: "June 12, 2026",
     category: "restaurant",
@@ -16,6 +18,8 @@ window.POSTS = [
   },
   {
     id: "market-strawberries",
+    foods: ["Fruit"],
+    topics: ["Seasonal ingredients", "Simple pleasures"],
     title: "Peak-season strawberries need almost nothing",
     date: "June 04, 2026",
     category: "recipe",
@@ -29,6 +33,8 @@ window.POSTS = [
   },
   {
     id: "perfect-sandwich",
+    foods: ["Sandwiches"],
+    topics: ["Restaurant discoveries"],
     title: "An argument for the perfect lunch sandwich",
     date: "May 28, 2026",
     category: "restaurant",
@@ -42,6 +48,8 @@ window.POSTS = [
   },
   {
     id: "olive-oil-cake",
+    foods: ["Cake"],
+    topics: ["Simple pleasures", "Kitchen notes"],
     title: "Olive oil cake, forever and always",
     date: "May 16, 2026",
     category: "recipe",
@@ -55,6 +63,8 @@ window.POSTS = [
   },
   {
     id: "crispy-dumplings",
+    foods: ["Dumplings"],
+    topics: ["Restaurant discoveries"],
     title: "Come for the dumplings, stay for the crispy bits",
     date: "May 02, 2026",
     category: "restaurant",
@@ -68,6 +78,8 @@ window.POSTS = [
   },
   {
     id: "breakfast-toast",
+    foods: ["Toast", "Eggs"],
+    topics: ["Kitchen notes"],
     title: "A very good reason to make breakfast",
     date: "April 21, 2026",
     category: "recipe",
