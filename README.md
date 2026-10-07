@@ -2,6 +2,8 @@
 
 A responsive editorial food blog built with plain HTML, CSS, and JavaScript.
 
+Every entry has its own shareable `/posts/<id>` page with the full text, date, location (when provided), photos, and links to neighboring entries. These pages work on direct visits and refreshes, even without JavaScript. Old `/#post=<id>` bookmarks still redirect to the matching page. Run the Python server for these routes; they are not static files for GitHub Pages.
+
 ## Preview locally
 
 ```bash
@@ -48,10 +50,12 @@ node --check newsletter.js
 python3 import_instagram.py /path/to/unzipped-instagram-export
 ```
 
-The importer finds feed posts and archived Stories, copies each photo into `images/instagram`, preserves the available text and date, and regenerates the complete site archive. Stories only appear in an export when Instagram retained them in your Story Archive.
+The importer finds feed posts and archived Stories, copies all supported photos (including carousel photos) into `images/instagram`, preserves the available text and date, and regenerates the complete site archive. Stories only appear in an export when Instagram retained them in your Story Archive. Videos and text embedded inside images are not converted to written blog text.
 
 ## Add a post manually
 
 Each post is an object in `posts.js`. Add the original Instagram photo to an `images/` directory, copy the full caption, date, location, and original post URL into a new object, and it will automatically become a searchable/filterable blog article.
+
+Use `body` for an expanded blog story, or `caption` for the original complete text. For multiple photos, add `photos: [{image: "images/first.jpg", alt: "Description"}, {image: "images/second.jpg", alt: "Description"}]`. A specific Instagram post URL is shown only as optional attribution; the full available story is displayed on the blog itself. Generic profile links are not shown as article sources.
 
 Instagram blocked unattended access to the public profile during this build, so the included six entries are clearly structured demo content rather than claims about the real account. Run the importer above to replace them with the exact archive.

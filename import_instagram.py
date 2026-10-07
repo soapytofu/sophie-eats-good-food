@@ -85,7 +85,18 @@ def main():
             # Stable IDs prevent re-imports from generating duplicate newsletter announcements.
             post_id = "ig-" + hashlib.sha256(f"{source_uri}:{timestamp}".encode()).hexdigest()[:20]
             destination = output_images / f"{post_id}{source.suffix.lower()}"
-            shutil.copy2(source, destination)
+            # Keep every photo in a carousel, not only its cover image.
+            photos = []
+            for media_index, media in enumerate(media_items):
+                media_source = export_dir / media.get("uri", "")
+                if not media_source.is_file():
+                    media_source = json_file.parent / media.get("uri", "")
+                if not media_source.is_file() or media_source.suffix.lower() not in {".jpg", ".jpeg", ".png", ".webp"}:
+                    continue
+                suffix = "" if media_index == 0 else f"-{media_index + 1}"
+                media_destination = output_images / f"{post_id}{suffix}{media_source.suffix.lower()}"
+                shutil.copy2(media_source, media_destination)
+                photos.append({"image": media_destination.relative_to(ROOT).as_posix(), "alt": make_title(caption, "A food moment")})
 
             title = make_title(caption, f"A good food moment #{len(posts)+1}")
             excerpt = re.sub(r"\s+", " ", caption).strip()
@@ -99,6 +110,7 @@ def main():
                 "categoryLabel": "Instagram Story" if is_story else "From Instagram",
                 "location": "",
                 "image": destination.relative_to(ROOT).as_posix(),
+                "photos": photos,
                 "alt": title,
                 "excerpt": excerpt or "A delicious moment from the feed.",
                 "caption": caption or "A delicious moment from the feed.",
