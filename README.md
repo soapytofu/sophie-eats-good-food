@@ -38,7 +38,12 @@ Provider reference: [Resend Send Email API](https://resend.com/docs/api-referenc
 python3 -m unittest discover -s tests -v
 node --check app.js
 node --check newsletter.js
+node --test tests/companion.test.js
 ```
+
+## Little Sophie
+
+An optional illustrated companion visits reserved spots beside the hero, journal, mailing list, and article pages. Click her to wave/hop, discover a random entry, or find the mailing list. Pause and hide controls persist for the browser session; a small “Show little Sophie” button restores her. System reduced-motion preferences disable automatic movement and animated gestures. The character uses a small inline SVG, has no chat backend, and sends no user data anywhere.
 
 ## Import every Instagram post (recommended)
 

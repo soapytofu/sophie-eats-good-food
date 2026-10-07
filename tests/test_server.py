@@ -65,6 +65,8 @@ class ServerTests(unittest.TestCase):
         for path in ["/.git/config", "/.env", "/.newsletter/newsletter.sqlite3", "/.newsletter-preview/outbox/test.eml", "/server.py", "/images/../newsletter.py", "/images/%2e%2e/server.py"]:
             self.assertEqual(self.request("GET", path)[0], 404, path)
         self.assertEqual(self.request("GET", "/styles.css?v=2")[0], 200)
+        self.assertEqual(self.request("GET", "/companion.css")[0], 200)
+        self.assertEqual(self.request("GET", "/companion.js")[0], 200)
 
     def test_direct_article_url_and_refresh_show_full_story(self):
         post = {"id": "specific entry", "title": "Lunch", "caption": "Opening.\n\nThe full story stays right here.", "image": "images/lunch.jpg"}

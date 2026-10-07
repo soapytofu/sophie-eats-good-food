@@ -22,7 +22,8 @@ class BlogTests(unittest.TestCase):
         self.assertIn("New York", page)
         self.assertIn("A very good lunch — Sophie Eats Good Food", page)
         self.assertNotIn("instagram.com/sophieeatsgoodfood", page)
-        self.assertNotIn("<script", page)
+        # The article text is server-rendered; scripts only power the optional companion.
+        self.assertIn('<div class="article-body"><p>First paragraph.', page)
 
     def test_expanded_body_takes_precedence_over_caption(self):
         self.post["body"] = "A complete blog story.\n\nMore than the original caption."
