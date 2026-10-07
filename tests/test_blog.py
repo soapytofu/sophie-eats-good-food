@@ -1,6 +1,6 @@
 import unittest
 
-from blog import render_post
+from blog import render_post, render_page, render_footer
 
 
 class BlogTests(unittest.TestCase):
@@ -21,7 +21,7 @@ class BlogTests(unittest.TestCase):
         self.assertIn('src="/images/second.jpg"', page)
         self.assertIn("New York", page)
         self.assertIn("A very good lunch — Sophie Eats Good Food", page)
-        self.assertNotIn("instagram.com/sophieeatsgoodfood", page)
+        self.assertNotIn("Original Instagram post ↗", page)
         # The article text is server-rendered; scripts only power the optional companion.
         self.assertIn('<div class="article-body"><p>First paragraph.', page)
 
@@ -47,6 +47,26 @@ class BlogTests(unittest.TestCase):
         self.assertIn('href="/posts/older%20entry"', page)
         self.assertIn('href="https://www.instagram.com/p/actual-post/"', page)
         self.assertIn("Last paragraph, in full.", page)
+
+    def test_pages_share_the_same_contact_footer(self):
+        footer = render_footer()
+        self.assertIn('href="https://www.instagram.com/sophieeatsgoodfood/"', footer)
+        self.assertIn('href="/about"', footer)
+        self.assertNotIn("$year", footer)
+        for page in (render_page("index.html"), render_page("about.html"), render_post(self.post, [self.post])):
+            self.assertIn(footer, page)
+            self.assertEqual(page.count('<footer class="site-footer">'), 1)
+            self.assertNotIn("$footer", page)
+            self.assertNotIn('href="#about"', page)
+            self.assertNotIn('href="/#about"', page)
+
+    def test_about_page_contains_own_content_and_current_navigation(self):
+        page = render_page("about.html")
+        self.assertIn("About Sophie — Sophie Eats Good Food", page)
+        self.assertIn('href="/about" aria-current="page"', page)
+        self.assertIn("Think of this blog as the longer conversation", page)
+        self.assertIn('href="/#journal"', page)
+        self.assertIn('href="/#subscribe"', page)
 
 
 if __name__ == "__main__":

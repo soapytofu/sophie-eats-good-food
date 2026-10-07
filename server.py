@@ -11,7 +11,7 @@ from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlsplit, unquote
 
 from newsletter import Newsletter, ROOT
-from blog import render_post
+from blog import render_post, render_page
 
 
 def parse_trusted_proxies(value):
@@ -60,9 +60,11 @@ class BlogHandler(SimpleHTTPRequestHandler):
 
     def page(self, title, message, action=None, token="", code=200):
         form = f'<form method="post" action="{html.escape(action)}"><input type="hidden" name="token" value="{html.escape(token)}"><button type="submit">{html.escape(title)}</button></form>' if action else ''
-        self.respond(code, f'''<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{html.escape(title)} — Sophie Eats Good Food</title>
-        <style>body{{background:#f4f0e7;color:#1d211b;font:18px/1.6 system-ui;padding:10vh 7vw;max-width:650px;margin:auto}}h1{{font:52px/1.1 Georgia}}button{{border:0;border-radius:50px;padding:16px 24px;background:#e5432f;color:white;font:16px system-ui;cursor:pointer}}a{{color:inherit}}</style>
-        <p>SOPHIE EATS GOOD FOOD</p><h1>{html.escape(title)}</h1><p>{html.escape(message)}</p>{form}<p><a href="/">Back to the journal ↗</a></p></html>''', "text/html")
+        self.respond(code, render_page("status.html", title=html.escape(title), message=html.escape(message), form=form), "text/html")
+
+    def send_error(self, code, message=None, explain=None):
+        title = "Page not found" if code == 404 else "Something went wrong"
+        self.page(title, "You can find the latest entries in the journal, or get in touch below.", code=code)
 
     def request_data(self):
         length = int(self.headers.get("Content-Length", "0"))
@@ -136,6 +138,10 @@ class BlogHandler(SimpleHTTPRequestHandler):
 
     def send_head(self):
         path = unquote(urlsplit(self.path).path)
+        if path in {"/", "/index.html", "/about", "/about/", "/about.html"}:
+            template = "about.html" if path.startswith("/about") else "index.html"
+            self.respond(200, render_page(template), "text/html")
+            return None
         if path.startswith("/posts/"):
             try:
                 posts = self.server.newsletter.read_posts()

@@ -4,6 +4,8 @@ A responsive editorial food blog built with plain HTML, CSS, and JavaScript.
 
 Every entry has its own shareable `/posts/<id>` page with the full text, date, location (when provided), photos, and links to neighboring entries. These pages work on direct visits and refreshes, even without JavaScript. Old `/#post=<id>` bookmarks still redirect to the matching page. Run the Python server for these routes; they are not static files for GitHub Pages.
 
+About Sophie lives at `/about`; old `/#about` bookmarks redirect there. The homepage, About page, entries, newsletter confirmation/unsubscribe screens, and error pages all use `footer.html`, with Sophie's Instagram contact link. Update that single template to change the contact details everywhere. Both the homepage and About page are rendered by the Python server, not served as raw templates.
+
 ## Preview locally
 
 ```bash
@@ -45,9 +47,13 @@ node --test tests/companion*.test.js
 
 ## Little Sophie
 
-An optional illustrated companion visits reserved spots beside the hero, journal, mailing list, and article pages. Click her to wave/hop, take a little stroll, discover a random entry, or find the mailing list. Her jointed cartoon rig has knee bends, opposing arm swings, subtle breathing and blinking, and a hop with anticipation and a soft landing. Short walks stay grounded at a relaxed pace; moving between distant sections uses a soft fade instead of flying across article text. Pause and hide controls persist for the browser session; a small “Show little Sophie” button restores her. Pausing roaming still allows deliberate hop/stroll interactions. System reduced-motion preferences disable automatic movement and animated gestures. The character uses a small inline SVG, has no chat backend, and sends no user data anywhere.
+An optional line-drawn stick-figure companion visits reserved spots beside the hero, journal, mailing list, About page, and article pages. Click her to wave/hop, take a little stroll, discover a random entry, or find the mailing list. Her jointed rig has knee bends, opposing arm swings, subtle breathing and blinking, and a hop with anticipation and a soft landing. Short walks stay grounded at a relaxed pace; moving between distant sections uses a soft fade instead of flying across article text. Pause and hide controls persist for the browser session; a small “Show little Sophie” button restores her. Pausing roaming still allows deliberate hop/stroll interactions. System reduced-motion preferences disable automatic movement and animated gestures. The character uses a small inline SVG, has no chat backend, and sends no user data anywhere.
 
 Sophie hides while the page scrolls or resizes and returns only after a safe perch is located. Her note's controls follow her button in keyboard Tab order; Escape closes the note and returns focus without scrolling the page.
+
+## Design direction
+
+The blog keeps a story-first, dated journal rather than a recipe-card grid. The separate About page, legible supporting text, and clear shared contact footer take inspiration from [Orangette](https://orangette.net/) and [Cup of Jo](https://cupofjo.com/about/), while retaining Sophie's cream/sage palette and handwritten accents. No other blogger's photos or biography are used.
 
 ## Import every Instagram post (recommended)
 

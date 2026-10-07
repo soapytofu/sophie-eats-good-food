@@ -49,15 +49,15 @@ document.querySelector('.menu-button').addEventListener('click', event => {
   const isOpen = nav.classList.toggle('open');
   event.currentTarget.setAttribute('aria-expanded', isOpen);
 });
-document.querySelectorAll('nav a').forEach(link => link.addEventListener('click', () => {
-  document.querySelector('nav').classList.remove('open');
+document.querySelectorAll('.site-header nav a').forEach(link => link.addEventListener('click', () => {
+  document.querySelector('.site-header nav').classList.remove('open');
   document.querySelector('.menu-button').setAttribute('aria-expanded', 'false');
 }));
-document.querySelector('#year').textContent = new Date().getFullYear();
 render();
 document.querySelector('#recent-posts').innerHTML = journalPosts.slice(0, 3).map(post => `<li><a href="/posts/${encodeURIComponent(post.id)}">${escapeHtml(post.title)}</a><span>${escapeHtml(post.date)}</span></li>`).join('');
 
 function openLinkedPost() {
+  if (location.hash === '#about') { location.replace('/about'); return; }
   if (!location.hash.startsWith('#post=')) return;
   // Keep links from earlier emails/bookmarks working with the new article pages.
   try { location.replace(`/posts/${encodeURIComponent(decodeURIComponent(location.hash.slice(6)))}`); } catch { /* Ignore malformed article links. */ }

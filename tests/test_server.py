@@ -103,7 +103,7 @@ class ServerTests(unittest.TestCase):
         self.assertIsNone(self.newsletter.subscriber(token))
 
     def test_server_never_serves_private_files(self):
-        for path in ["/.git/config", "/.env", "/.newsletter/newsletter.sqlite3", "/.newsletter-preview/outbox/test.eml", "/server.py", "/images/../newsletter.py", "/images/%2e%2e/server.py"]:
+        for path in ["/.git/config", "/.env", "/.newsletter/newsletter.sqlite3", "/.newsletter-preview/outbox/test.eml", "/server.py", "/footer.html", "/status.html", "/images/../newsletter.py", "/images/%2e%2e/server.py"]:
             self.assertEqual(self.request("GET", path)[0], 404, path)
         self.assertEqual(self.request("GET", "/styles.css?v=2")[0], 200)
         self.assertEqual(self.request("GET", "/companion.css")[0], 200)
@@ -129,6 +129,39 @@ class ServerTests(unittest.TestCase):
         status, page = self.request("GET", f'/posts/{post["id"]}')
         self.assertEqual(status, 200)
         self.assertIn(post["title"], page)
+
+    def test_about_page_has_a_direct_refreshable_route(self):
+        for path in ("/about", "/about", "/about/", "/about.html"):
+            status, page = self.request("GET", path)
+            self.assertEqual(status, 200)
+            self.assertIn("About Sophie — Sophie Eats Good Food", page)
+            self.assertIn('<footer class="site-footer">', page)
+        status, body = self.request("HEAD", "/about")
+        self.assertEqual(status, 200)
+        self.assertEqual(body, "")
+
+    def test_home_articles_and_missing_pages_have_contact_footers(self):
+        post = self.newsletter.read_posts()[0]
+        for path, expected in (("/", 200), ("/index.html", 200), (f'/posts/{post["id"]}', 200), ("/missing", 404), ("/posts/missing", 404)):
+            status, page = self.request("GET", path)
+            self.assertEqual(status, expected)
+            footer = page.split('<footer class="site-footer">', 1)[1].split('</footer>', 1)[0]
+            self.assertIn('href="https://www.instagram.com/sophieeatsgoodfood/"', footer)
+            self.assertIn('href="/about"', footer)
+            self.assertNotIn("$footer", page)
+
+    def test_newsletter_confirmation_and_unsubscribe_pages_have_contact(self):
+        self.newsletter.subscribe("reader@example.com", "127.0.0.1")
+        with self.newsletter.connect() as db:
+            token = db.execute("SELECT token FROM subscribers").fetchone()[0]
+        for action in ("confirm", "unsubscribe"):
+            path = f"/newsletter/{action}"
+            for method in ("GET", "POST"):
+                body = urlencode({"token": token}) if method == "POST" else None
+                status, page = self.request(method, f"{path}?token={token}", body, {"Content-Type": "application/x-www-form-urlencoded"})
+                self.assertEqual(status, 200)
+                footer = page.split('<footer class="site-footer">', 1)[1].split('</footer>', 1)[0]
+                self.assertIn("@sophieeatsgoodfood", footer)
 
 
 if __name__ == "__main__":

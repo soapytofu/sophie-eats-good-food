@@ -25,6 +25,14 @@ def image_url(value):
     return ""
 
 
+def render_footer():
+    return Template((ROOT / "footer.html").read_text(encoding="utf-8")).substitute(year=datetime.now().year)
+
+
+def render_page(template, **values):
+    return Template((ROOT / template).read_text(encoding="utf-8")).substitute(footer=render_footer(), **values)
+
+
 def render_post(post, posts):
     title = post.get("title") or "A good food moment"
     # Keep every paragraph and line of the original text; don't invent missing details.
@@ -69,7 +77,7 @@ def render_post(post, posts):
       <h1>{escape(title)}</h1><p class="entry-meta">By Sophie <span aria-hidden="true">·</span> {minutes} min read{location}</p></header>
       {first_photo}<div class="article-body">{body}<p class="signature">Sophie x</p></div>{other_photos}{source_link}
     </article><nav class="entry-navigation" aria-label="More journal entries">{"".join(neighbors)}</nav>'''
-    return Template((ROOT / "post.html").read_text(encoding="utf-8")).substitute(
+    return render_page("post.html",
         title=escape(title), description=escape(post.get("excerpt") or caption[:180]),
-        article=article, year=datetime.now().year,
+        article=article,
     )
