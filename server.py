@@ -9,6 +9,7 @@ from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlsplit, unquote
 
 from newsletter import Newsletter, ROOT
+from blog import render_post
 
 
 class BlogHandler(SimpleHTTPRequestHandler):
@@ -31,7 +32,8 @@ class BlogHandler(SimpleHTTPRequestHandler):
         self.send_header("Content-Type", f"{content_type}; charset=utf-8")
         self.send_header("Content-Length", str(len(payload)))
         self.end_headers()
-        self.wfile.write(payload)
+        if self.command != "HEAD":
+            self.wfile.write(payload)
 
     def page(self, title, message, action=None, token="", code=200):
         form = f'<form method="post" action="{html.escape(action)}"><input type="hidden" name="token" value="{html.escape(token)}"><button type="submit">{html.escape(title)}</button></form>' if action else ''
@@ -110,6 +112,17 @@ class BlogHandler(SimpleHTTPRequestHandler):
 
     def send_head(self):
         path = unquote(urlsplit(self.path).path)
+        if path.startswith("/posts/"):
+            try:
+                posts = self.server.newsletter.read_posts()
+                post = next((item for item in posts if item["id"] == path[len("/posts/"):]), None)
+                if not post:
+                    self.page("Entry not found", "This page may have moved. You can find the latest entries in the journal.", code=404)
+                else:
+                    self.respond(200, render_post(post, posts), "text/html")
+            except Exception:
+                self.page("The journal is taking a moment", "Please try again shortly.", code=503)
+            return None
         relative = "index.html" if path == "/" else path.lstrip("/")
         target = (ROOT / relative).resolve()
         public = {"index.html", "styles.css", "app.js", "newsletter.js", "posts.js"}

@@ -5,6 +5,7 @@ import unittest
 from http.client import HTTPConnection
 from http.server import ThreadingHTTPServer
 from urllib.parse import urlencode
+from unittest.mock import patch
 
 from newsletter import Newsletter
 from server import BlogHandler
@@ -64,6 +65,27 @@ class ServerTests(unittest.TestCase):
         for path in ["/.git/config", "/.env", "/.newsletter/newsletter.sqlite3", "/.newsletter-preview/outbox/test.eml", "/server.py", "/images/../newsletter.py", "/images/%2e%2e/server.py"]:
             self.assertEqual(self.request("GET", path)[0], 404, path)
         self.assertEqual(self.request("GET", "/styles.css?v=2")[0], 200)
+
+    def test_direct_article_url_and_refresh_show_full_story(self):
+        post = {"id": "specific entry", "title": "Lunch", "caption": "Opening.\n\nThe full story stays right here.", "image": "images/lunch.jpg"}
+        with patch.object(self.newsletter, "read_posts", return_value=[post]):
+            for _ in range(2):
+                status, page = self.request("GET", "/posts/specific%20entry")
+                self.assertEqual(status, 200)
+                self.assertIn("The full story stays right here.", page)
+                self.assertIn('src="/images/lunch.jpg"', page)
+            status, body = self.request("HEAD", "/posts/specific%20entry")
+            self.assertEqual(status, 200)
+            self.assertEqual(body, "")
+            status, page = self.request("GET", "/posts/no-such-entry")
+            self.assertEqual(status, 404)
+            self.assertIn("Entry not found", page)
+
+    def test_real_archive_is_available_on_an_article_page(self):
+        post = self.newsletter.read_posts()[0]
+        status, page = self.request("GET", f'/posts/{post["id"]}')
+        self.assertEqual(status, 200)
+        self.assertIn(post["title"], page)
 
 
 if __name__ == "__main__":
