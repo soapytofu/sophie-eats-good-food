@@ -106,8 +106,8 @@ class ServerTests(unittest.TestCase):
         for path in ["/.git/config", "/.env", "/.newsletter/newsletter.sqlite3", "/.newsletter-preview/outbox/test.eml", "/server.py", "/footer.html", "/status.html", "/life.json", "/images/../newsletter.py", "/images/%2e%2e/server.py"]:
             self.assertEqual(self.request("GET", path)[0], 404, path)
         self.assertEqual(self.request("GET", "/styles.css?v=2")[0], 200)
-        self.assertEqual(self.request("GET", "/companion.css")[0], 200)
-        self.assertEqual(self.request("GET", "/companion.js")[0], 200)
+        self.assertEqual(self.request("GET", "/companion.css")[0], 404)
+        self.assertEqual(self.request("GET", "/companion.js")[0], 404)
         self.assertEqual(self.request("GET", "/gallery.css")[0], 200)
         self.assertEqual(self.request("GET", "/gallery.js")[0], 200)
         self.assertEqual(self.request("GET", "/journal-filters.js")[0], 200)
