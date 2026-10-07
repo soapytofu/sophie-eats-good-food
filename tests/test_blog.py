@@ -22,7 +22,7 @@ class BlogTests(unittest.TestCase):
         self.assertIn("New York", page)
         self.assertIn("A very good lunch — Sophie Eats Good Food", page)
         self.assertNotIn("Original Instagram post ↗", page)
-        # The article text is server-rendered; scripts only power the optional companion.
+        # The complete article text is available without JavaScript.
         self.assertIn('<div class="article-body"><p>First paragraph.', page)
 
     def test_expanded_body_takes_precedence_over_caption(self):
@@ -68,6 +68,12 @@ class BlogTests(unittest.TestCase):
         self.assertIn("Think of this blog as the longer conversation", page)
         self.assertIn('href="/#journal"', page)
         self.assertIn('href="/#subscribe"', page)
+
+    def test_pages_do_not_load_the_removed_avatar(self):
+        for page in (render_page("index.html"), render_page("about.html"), render_post(self.post, [self.post]), render_life([])):
+            self.assertNotIn('companion.js', page)
+            self.assertNotIn('companion.css', page)
+            self.assertNotIn('little Sophie', page)
 
     def test_journal_keeps_search_without_category_buttons(self):
         page = render_page("index.html")
