@@ -13,9 +13,7 @@
 .sophie-companion[hidden],.companion-panel[hidden],.companion-restore[hidden] { display:none; }
 .companion-avatar { display:block; padding:0; width:84px; height:100px; border:0; background:transparent; color:var(--sage); cursor:pointer; pointer-events:auto; }
 .companion-character { width:84px; height:100px; overflow:visible; }
-.companion-label { position:absolute; top:96px; left:-7px; width:98px; font:17px/1.2 "Caveat",cursive; color:var(--sage); white-space:nowrap; }
-.companion-sparkle { position:absolute; top:3px; right:-1px; font-size:23px; color:var(--red); transform:rotate(12deg); }
-.companion-avatar:hover .companion-sparkle { color:var(--sage); }
+.companion-label { position:absolute; top:98px; left:-7px; width:98px; font:15px/1.2 "Caveat",cursive; color:var(--sage); white-space:nowrap; }
 .companion-facing { transform-origin:42px 50px; transition:transform .24s cubic-bezier(.4,0,.2,1); }
 .faces-left .companion-facing { transform:scaleX(-1); }
 .is-running,.is-arriving { will-change:transform,opacity; }

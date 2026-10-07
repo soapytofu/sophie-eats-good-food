@@ -69,50 +69,33 @@
       <div class="companion-settings"><button data-action="pause"></button><button data-action="hide">Hide Sophie</button></div>
     </div>
     <button class="companion-avatar" aria-label="Say hello to little Sophie" aria-expanded="false" aria-controls="companion-panel">
-      <span class="companion-sparkle" aria-hidden="true">✧</span>
       <svg class="companion-character" viewBox="0 0 84 100" aria-hidden="true">
-        <defs>
-          <linearGradient id="sophie-skin" x1="0" y1="0" x2="0.7" y2="1"><stop stop-color="#ffe0c6"/><stop offset="1" stop-color="#e9bda3"/></linearGradient>
-          <linearGradient id="sophie-dress" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d4e4c7"/><stop offset="1" stop-color="#9cb98d"/></linearGradient>
-          <linearGradient id="sophie-hair" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#44434e"/><stop offset=".5" stop-color="#252731"/><stop offset="1" stop-color="#353440"/></linearGradient>
-        </defs>
-        <ellipse class="companion-shadow" cx="42" cy="96" rx="21" ry="3" fill="#969985" opacity=".25"/>
+        <ellipse class="companion-shadow" cx="42" cy="96" rx="15" ry="2" fill="#969985" opacity=".18"/>
         <g class="companion-facing">
-        <g class="companion-person" stroke="#66594f" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round">
+        <g class="companion-person" stroke="none" stroke-linecap="round" stroke-linejoin="round">
           <g class="companion-leg companion-leg-left">
-            <path d="M35 75v10" stroke="#edc3a7" stroke-width="6"/>
-            <g class="companion-shin companion-shin-left"><path d="M35 84v7" stroke="#edc3a7" stroke-width="5.7"/><g class="companion-foot companion-foot-left"><path d="M32 90q3 2 6 0l1 5H27q-3-4 5-5Z" fill="#cb9388"/><path d="M30 93h6" stroke="#fce1d5"/></g></g>
+            <path d="M35 75v10" stroke="#e8c5aa" stroke-width="5"/>
+            <g class="companion-shin companion-shin-left"><path d="M35 84v7" stroke="#e8c5aa" stroke-width="5"/><g class="companion-foot companion-foot-left"><path d="M33 90h5v5H30q-2-4 3-5Z" fill="#555e4e"/></g></g>
           </g>
           <g class="companion-leg companion-leg-right">
-            <path d="M49 75v10" stroke="#edc3a7" stroke-width="6"/>
-            <g class="companion-shin companion-shin-right"><path d="M49 84v7" stroke="#edc3a7" stroke-width="5.7"/><g class="companion-foot companion-foot-right"><path d="M46 90q3 2 6 0 8 1 5 5H45Z" fill="#cb9388"/><path d="M48 93h6" stroke="#fce1d5"/></g></g>
+            <path d="M49 75v10" stroke="#e8c5aa" stroke-width="5"/>
+            <g class="companion-shin companion-shin-right"><path d="M49 84v7" stroke="#e8c5aa" stroke-width="5"/><g class="companion-foot companion-foot-right"><path d="M46 90h5q5 1 3 5h-8Z" fill="#555e4e"/></g></g>
           </g>
           <g class="companion-torso">
-            <path class="companion-hair-back" d="M22 28Q20 6 42 6t20 22l-1 21q-7 6-13-1H33q-8 5-11 0Z" fill="url(#sophie-hair)" stroke="#34333d"/>
-            <g class="companion-arm companion-arm-left"><path d="M29 51l-6 10" stroke="#edc3a7" stroke-width="5.5"/><g class="companion-forearm-left"><path d="M23 60l-1 9" stroke="#edc3a7" stroke-width="5.5"/><ellipse cx="22" cy="70" rx="3" ry="3.5" fill="#f0c6ac" stroke="none"/></g></g>
-            <g class="companion-arm companion-arm-right"><path d="M55 51l6 10" stroke="#edc3a7" stroke-width="5.5"/><g class="companion-forearm-right"><path d="M61 60l1 9" stroke="#edc3a7" stroke-width="5.5"/><ellipse cx="62" cy="70" rx="3" ry="3.5" fill="#f0c6ac" stroke="none"/></g></g>
-            <path d="M38 42v7q4 5 8 0v-7" fill="url(#sophie-skin)"/>
-            <path d="M31 47l7-1q4 5 8 0l7 1 1 12H30Z" fill="url(#sophie-dress)" stroke="#788e6d"/>
-            <path d="M30 47q-5 1-5 8l7 2m22-10q5 1 5 8l-7 2" fill="#d8e6cb" stroke="#788e6d"/>
-            <g class="companion-skirt"><path d="M30 58h24l8 21q-20 9-40 0Z" fill="url(#sophie-dress)" stroke="#788e6d"/><path d="M32 63l-4 14m13-14v15m11-15 4 14" fill="none" stroke="#829b77" opacity=".4"/><path d="M25 79q17 6 34 0" fill="none" stroke="#f7f4df" stroke-width="2"/>
-              <g stroke="none" fill="#fffdf0"><path d="M32 66q-4-4-5 0-1 3 3 3-2 4 2 4 4 0 2-4 4 0 3-3-1-4-5 0Z"/><path d="M48 69q-4-4-5 0-1 3 3 3-2 4 2 4 4 0 2-4 4 0 3-3-1-4-5 0Z"/><circle cx="32" cy="68" r="1.1" fill="#deb877"/><circle cx="48" cy="71" r="1.1" fill="#deb877"/></g>
-            </g>
-            <path d="M39 57l3 2 3-2m-3 2-2 5m2-5 2 5" fill="none" stroke="#f5f0dd" stroke-width="1.5"/>
+            <path class="companion-hair-back" d="M26 27C26 14 32 9 42 9s16 5 16 18v21q-6 4-13-1h-7q-7 5-12 1Z" fill="#30342e"/>
+            <g class="companion-arm companion-arm-left"><path d="M29 51l-6 10" stroke="#e8c5aa" stroke-width="4.5"/><g class="companion-forearm-left"><path d="M23 60l-1 9" stroke="#e8c5aa" stroke-width="4.5"/></g></g>
+            <g class="companion-arm companion-arm-right"><path d="M55 51l6 10" stroke="#e8c5aa" stroke-width="4.5"/><g class="companion-forearm-right"><path d="M61 60l1 9" stroke="#e8c5aa" stroke-width="4.5"/></g></g>
+            <path d="M38 41v8h8v-8" fill="#e8c5aa"/>
+            <path d="M32 47h5q5 6 10 0h5l2 13H30Z" fill="#b2c2a3"/>
+            <g class="companion-skirt"><path d="M30 58h24l6 21q-18 5-36 0Z" fill="#b2c2a3"/></g>
             <g class="companion-head">
-              <ellipse cx="42" cy="28" rx="18" ry="19.5" fill="url(#sophie-skin)" stroke="#c69881"/>
-              <ellipse cx="29" cy="35" rx="4" ry="2.4" fill="#e79a95" opacity=".48" stroke="none"/><ellipse cx="55" cy="35" rx="4" ry="2.4" fill="#e79a95" opacity=".48" stroke="none"/>
-              <path d="M30 24q3-2 6 0m12 0q3-2 6 0" fill="none" stroke="#51423e" stroke-width="1.2"/>
-              <g class="companion-eyes" stroke="none">
-                <ellipse cx="33" cy="29.5" rx="3.5" ry="4.3" fill="#fff8ef"/><ellipse cx="51" cy="29.5" rx="3.5" ry="4.3" fill="#fff8ef"/>
-                <ellipse cx="33.5" cy="30" rx="2.4" ry="3.2" fill="#403c42"/><ellipse cx="50.5" cy="30" rx="2.4" ry="3.2" fill="#403c42"/>
-                <circle cx="32.7" cy="28.6" r="1" fill="white"/><circle cx="49.7" cy="28.6" r="1" fill="white"/>
-                <path d="M29.7 27.5l-1.5-1m25.5 1 1.5-1" stroke="#51423e" stroke-width="1.1"/>
+              <ellipse cx="42" cy="29" rx="13" ry="15" fill="#e8c5aa"/>
+              <g class="companion-eyes" fill="#30342e">
+                <circle cx="37.5" cy="30" r="1.15"/><circle cx="46.5" cy="30" r="1.15"/>
               </g>
-              <path d="M41 33q1 1.2 2 0" fill="none" stroke="#cb987f"/>
-              <path class="companion-smile" d="M38.5 37q3.5 3 7 0" fill="none" stroke="#a36563" stroke-width="1.4"/>
-              <path class="companion-happy-mouth" d="M38.5 36.5q3.5 1.5 7 0c0 6-7 6-7 0Z" fill="#a56566" stroke="none"/>
-              <g class="companion-bangs"><path d="M42 10C33 5 22 12 23 28q8-1 12-8 3-1 7-10c4 9 7 9 9 12q4 5 10 5C61 12 52 5 42 10Z" fill="url(#sophie-hair)" stroke="#34333d"/><path d="M40 12q-5 0-9 7m13-7q5 1 9 8" fill="none" stroke="#76707d" opacity=".45"/><path d="M42 11v3" stroke="#d7af96" stroke-width=".8"/></g>
-              <path d="M58 16q5-5 8 0l-4 3q6 4 2 6l-6-6-4 4q-5-3 1-7Z" fill="#d9a09a" stroke="#ad7876" stroke-width=".8"/><circle cx="59" cy="18.5" r="1.6" fill="#f4cbc1" stroke="none"/>
+              <path class="companion-smile" d="M40 36q2 1.8 4 0" fill="none" stroke="#66594f" stroke-width="1"/>
+              <path class="companion-happy-mouth" d="M40 35.5q2 1 4 0c0 3.5-4 3.5-4 0Z" fill="#66594f"/>
+              <g class="companion-bangs"><path d="M42 12C35 8 27 15 27 27q8-1 15-15c3 9 8 13 15 14C57 15 50 8 42 12Z" fill="#30342e"/></g>
             </g>
           </g>
         </g>
