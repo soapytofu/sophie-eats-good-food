@@ -4,7 +4,7 @@ A responsive editorial food blog built with plain HTML, CSS, and JavaScript.
 
 Every entry has its own shareable `/posts/<id>` page with the full text, date, location (when provided), photos, and links to neighboring entries. These pages work on direct visits and refreshes, even without JavaScript. Old `/#post=<id>` bookmarks still redirect to the matching page. Run the Python server for these routes; they are not static files for GitHub Pages.
 
-About Sophie lives at `/about`; old `/#about` bookmarks redirect there. The homepage, About page, entries, newsletter confirmation/unsubscribe screens, and error pages all use `footer.html`, with Sophie's Instagram contact link. Update that single template to change the contact details everywhere. Both the homepage and About page are rendered by the Python server, not served as raw templates.
+About Sophie lives at `/about`; old `/#about` bookmarks redirect there. The homepage, About page, Life's snippets gallery, entries, newsletter confirmation/unsubscribe screens, and error pages all use `footer.html`, with Sophie's Instagram contact link. Update that single template to change the contact details everywhere. These pages are rendered by the Python server, not served as raw templates.
 
 ## Preview locally
 
@@ -42,7 +42,8 @@ Provider reference: [Resend Send Email API](https://resend.com/docs/api-referenc
 python3 -m unittest discover -s tests -v
 node --check app.js
 node --check newsletter.js
-node --test tests/companion*.test.js
+node --check gallery.js
+node --test tests/*.test.js
 ```
 
 ## Little Sophie
@@ -71,8 +72,27 @@ Mixed video/photo carousels use their first supported photo as the cover. Import
 
 ## Add a post manually
 
-Each post is an object in `posts.js`. Add the original Instagram photo to an `images/` directory, copy the full caption, date, location, and original post URL into a new object, and it will automatically become a searchable/filterable blog article.
+Each post is an object in `posts.js`. Add the original Instagram photo to an `images/` directory, copy the full caption, date, location, and original post URL into a new object, and it will automatically become a searchable blog article.
 
 Use `body` for an expanded blog story, or `caption` for the original complete text. For multiple photos, add `photos: [{image: "images/first.jpg", alt: "Description"}, {image: "images/second.jpg", alt: "Description"}]`. A specific Instagram post URL is shown only as optional attribution; the full available story is displayed on the blog itself. Generic profile links are not shown as article sources.
 
 Instagram blocked unattended access to the public profile during this build, so the included six entries are clearly structured demo content rather than claims about the real account. Run the importer above to replace them with the exact archive.
+
+## Life's snippets
+
+The separate `/life` album is for non-food photos. It starts empty: no stock images or food entries are presented as Sophie's life photos.
+
+Put your photos in `images/life/`, then add them to `life.json` in the order you want them displayed:
+
+```json
+[
+  {
+    "image": "images/life/your-photo.jpg",
+    "alt": "A description of the photo",
+    "caption": "An optional little note",
+    "date": "October 2026"
+  }
+]
+```
+
+Only `image` is required; provide descriptive `alt` text for accessibility. Captions and dates are optional. Images keep their original proportions in a quiet two-column gallery (one column on small screens). Click a photo to enlarge it, use the arrow keys or buttons to browse, and Escape to close. Photos and captions are still available without JavaScript. This collection is independent of `posts.js`; adding life photos does not send food-blog newsletter notifications. There is no browser-based upload editor yet.

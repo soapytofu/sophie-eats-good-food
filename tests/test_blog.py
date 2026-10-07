@@ -1,6 +1,6 @@
 import unittest
 
-from blog import render_post, render_page, render_footer
+from blog import render_post, render_page, render_footer, render_life
 
 
 class BlogTests(unittest.TestCase):
@@ -53,12 +53,13 @@ class BlogTests(unittest.TestCase):
         self.assertIn('href="https://www.instagram.com/sophieeatsgoodfood/"', footer)
         self.assertIn('href="/about"', footer)
         self.assertNotIn("$year", footer)
-        for page in (render_page("index.html"), render_page("about.html"), render_post(self.post, [self.post])):
+        for page in (render_page("index.html"), render_page("about.html"), render_post(self.post, [self.post]), render_life([])):
             self.assertIn(footer, page)
             self.assertEqual(page.count('<footer class="site-footer">'), 1)
             self.assertNotIn("$footer", page)
             self.assertNotIn('href="#about"', page)
             self.assertNotIn('href="/#about"', page)
+            self.assertIn('href="/life"', page)
 
     def test_about_page_contains_own_content_and_current_navigation(self):
         page = render_page("about.html")
@@ -73,6 +74,42 @@ class BlogTests(unittest.TestCase):
         self.assertIn('id="search" type="search"', page)
         self.assertNotIn('data-filter=', page)
         self.assertNotIn('aria-label="Filter posts"', page)
+
+    def test_life_album_is_independent_and_empty_until_photos_are_added(self):
+        page = render_life([])
+        self.assertIn('href="/life" aria-current="page"', page)
+        self.assertIn("0 photos", page)
+        self.assertIn("This album is waiting for its first photos.", page)
+        self.assertNotIn('data-gallery-photo', page)
+        self.assertNotIn('posts.js', page)
+        self.assertNotIn('$gallery', page)
+        with self.assertRaises(ValueError):
+            render_life({"image": "images/photo.jpg"})
+
+    def test_life_album_renders_all_photos_and_optional_notes(self):
+        page = render_life([
+            {"image": "images/life/first.jpg", "alt": "An afternoon walk", "caption": "A quiet corner", "date": "October 2026"},
+            {"image": "images/life/second.jpg"},
+        ])
+        self.assertIn("2 photos", page)
+        self.assertIn('src="/images/life/first.jpg" alt="An afternoon walk" decoding="async"', page)
+        self.assertIn('src="/images/life/second.jpg" alt="A moment from life" loading="lazy"', page)
+        self.assertIn('<span>A quiet corner</span>', page)
+        self.assertIn('life-photo-date">October 2026', page)
+        self.assertEqual(page.count('data-gallery-photo'), 2)
+        self.assertNotIn('life-empty-heading', page)
+
+    def test_life_album_escapes_notes_and_rejects_unsafe_sources(self):
+        page = render_life([
+            {"image": "javascript:alert(1)"}, {"image": "/.env"}, None,
+            {"image": "https://example.com/photo.jpg?a=1&b=2", "caption": "<script>not markup</script>", "alt": 'A "view"'},
+        ])
+        self.assertIn("1 photo</p>", page)
+        self.assertNotIn('javascript:', page)
+        self.assertNotIn('<script>not markup', page)
+        self.assertIn('&lt;script&gt;not markup&lt;/script&gt;', page)
+        self.assertIn('alt="A &quot;view&quot;"', page)
+        self.assertIn('photo.jpg?a=1&amp;b=2', page)
 
 
 if __name__ == "__main__":

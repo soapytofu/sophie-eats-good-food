@@ -103,11 +103,13 @@ class ServerTests(unittest.TestCase):
         self.assertIsNone(self.newsletter.subscriber(token))
 
     def test_server_never_serves_private_files(self):
-        for path in ["/.git/config", "/.env", "/.newsletter/newsletter.sqlite3", "/.newsletter-preview/outbox/test.eml", "/server.py", "/footer.html", "/status.html", "/images/../newsletter.py", "/images/%2e%2e/server.py"]:
+        for path in ["/.git/config", "/.env", "/.newsletter/newsletter.sqlite3", "/.newsletter-preview/outbox/test.eml", "/server.py", "/footer.html", "/status.html", "/life.json", "/images/../newsletter.py", "/images/%2e%2e/server.py"]:
             self.assertEqual(self.request("GET", path)[0], 404, path)
         self.assertEqual(self.request("GET", "/styles.css?v=2")[0], 200)
         self.assertEqual(self.request("GET", "/companion.css")[0], 200)
         self.assertEqual(self.request("GET", "/companion.js")[0], 200)
+        self.assertEqual(self.request("GET", "/gallery.css")[0], 200)
+        self.assertEqual(self.request("GET", "/gallery.js")[0], 200)
 
     def test_direct_article_url_and_refresh_show_full_story(self):
         post = {"id": "specific entry", "title": "Lunch", "caption": "Opening.\n\nThe full story stays right here.", "image": "images/lunch.jpg"}
@@ -139,6 +141,22 @@ class ServerTests(unittest.TestCase):
         status, body = self.request("HEAD", "/about")
         self.assertEqual(status, 200)
         self.assertEqual(body, "")
+
+    def test_life_album_has_a_direct_refreshable_route(self):
+        for path in ("/life", "/life", "/life/", "/life.html"):
+            status, page = self.request("GET", path)
+            self.assertEqual(status, 200)
+            self.assertIn("Life’s snippets — Sophie Eats Good Food", page)
+            self.assertIn("@sophieeatsgoodfood", page)
+            self.assertNotIn("$gallery", page)
+        self.assertEqual(self.request("HEAD", "/life"), (200, ""))
+
+    def test_malformed_album_returns_a_friendly_page(self):
+        with patch("server.render_life", side_effect=ValueError("bad album")):
+            status, page = self.request("GET", "/life")
+            self.assertEqual(status, 503)
+            self.assertIn("The album is taking a moment", page)
+            self.assertIn("@sophieeatsgoodfood", page)
 
     def test_home_articles_and_missing_pages_have_contact_footers(self):
         post = self.newsletter.read_posts()[0]
