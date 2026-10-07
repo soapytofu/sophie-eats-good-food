@@ -16,7 +16,9 @@
 .companion-label { position:absolute; top:96px; left:-7px; width:98px; font:17px/1.2 "Caveat",cursive; color:var(--sage); white-space:nowrap; }
 .companion-sparkle { position:absolute; top:3px; right:-1px; font-size:23px; color:var(--red); transform:rotate(12deg); }
 .companion-avatar:hover .companion-sparkle { color:var(--sage); }
-.faces-left .companion-person { transform:translateX(84px) scaleX(-1); }
+.companion-facing { transform-origin:42px 50px; transition:transform .24s cubic-bezier(.4,0,.2,1); }
+.faces-left .companion-facing { transform:scaleX(-1); }
+.is-running,.is-arriving { will-change:transform,opacity; }
 .companion-panel { position:absolute; bottom:115px; right:0; width:265px; padding:22px 19px 15px; background:#fffdf7; border:1px solid #d9dccb; border-radius:15px 15px 4px 15px; box-shadow:0 8px 30px #343a3012; pointer-events:auto; color:var(--ink); text-align:left; }
 .companion-panel::after { content:""; position:absolute; bottom:-7px; right:32px; width:12px; height:12px; background:#fffdf7; border-right:1px solid #d9dccb; border-bottom:1px solid #d9dccb; transform:rotate(45deg); }
 .panel-below .companion-panel { bottom:auto; top:124px; border-radius:4px 15px 15px 15px; }
@@ -31,16 +33,65 @@
 .companion-settings { margin-top:18px; padding-top:12px; border-top:1px dashed var(--line); display:flex; justify-content:space-between; gap:12px; }
 .companion-settings button { border:0; padding:3px 0; background:none; cursor:pointer; color:var(--muted); font:10px/1.4 "DM Sans",sans-serif; }
 .companion-restore { position:fixed; bottom:14px; right:14px; z-index:20; padding:8px 12px; background:var(--cream); color:var(--sage); border:1px solid var(--line); border-radius:20px; font:12px "DM Sans",sans-serif; cursor:pointer; box-shadow:0 3px 12px #343a3010; }
-.companion-arm { transform-origin:56px 52px; }
-.is-hopping .companion-character { animation:sophie-hop .8s ease; }
-.is-hopping .companion-arm { animation:sophie-wave .25s ease-in-out 3 alternate; }
-.is-running .companion-leg-left { transform-origin:34px 77px; animation:sophie-step .16s ease-in-out infinite alternate; }
-.is-running .companion-leg-right { transform-origin:50px 77px; animation:sophie-step .16s ease-in-out infinite alternate-reverse; }
-.is-running .companion-character { animation:sophie-bounce .16s ease-in-out infinite alternate; }
-@keyframes sophie-hop { 0%,100% { transform:translateY(0) rotate(0); } 35% { transform:translateY(-22px) rotate(-6deg); } 65% { transform:translateY(-8px) rotate(5deg); } }
-@keyframes sophie-wave { from { transform:rotate(-12deg); } to { transform:rotate(22deg); } }
-@keyframes sophie-step { from { transform:rotate(-20deg); } to { transform:rotate(20deg); } }
-@keyframes sophie-bounce { from { transform:translateY(0); } to { transform:translateY(-3px); } }
+.companion-person { transform-origin:42px 94px; }
+.companion-torso { transform-origin:42px 72px; animation:sophie-breathe 4.8s ease-in-out infinite; }
+.companion-head { transform-origin:42px 43px; animation:sophie-look 6.5s ease-in-out infinite; }
+.companion-eyes { transform-origin:42px 30px; animation:sophie-blink 7s linear infinite; }
+.companion-happy-mouth { opacity:0; }
+.companion-leg-left { transform-origin:35px 75px; }
+.companion-leg-right { transform-origin:49px 75px; }
+.companion-shin-left { transform-origin:35px 84px; }
+.companion-shin-right { transform-origin:49px 84px; }
+.companion-foot-left { transform-origin:35px 90px; }
+.companion-foot-right { transform-origin:49px 90px; }
+.companion-arm-left { transform-origin:29px 51px; }
+.companion-arm-right { transform-origin:55px 51px; }
+.companion-forearm-left { transform-origin:23px 60px; }
+.companion-forearm-right { transform-origin:61px 60px; }
+.companion-skirt { transform-origin:42px 58px; }
+.companion-bangs { transform-origin:42px 12px; }
+.companion-shadow { transform-origin:42px 96px; }
+.is-running .companion-person { animation:sophie-walk-bob .76s ease-in-out infinite; }
+.is-running .companion-torso { animation:sophie-walk-sway .76s ease-in-out infinite; }
+.is-running .companion-head { animation:sophie-head-lag .76s ease-in-out infinite; }
+.is-running .companion-leg-left,.is-running .companion-leg-right { animation:sophie-walk-leg .76s linear infinite; }
+.is-running .companion-shin-left,.is-running .companion-shin-right { animation:sophie-walk-knee .76s linear infinite; }
+.is-running .companion-foot-left,.is-running .companion-foot-right { animation:sophie-walk-foot .76s linear infinite; }
+.is-running .companion-arm-left,.is-running .companion-arm-right { animation:sophie-arm-swing .76s ease-in-out infinite; }
+.is-running .companion-leg-right,.is-running .companion-shin-right,.is-running .companion-foot-right,.is-running .companion-arm-left { animation-delay:-.38s; }
+.is-running .companion-skirt,.is-running .companion-bangs { animation:sophie-cloth-sway .76s ease-in-out infinite; }
+.is-hopping .companion-person { animation:sophie-hop 1.25s ease-in-out; }
+.is-hopping .companion-shadow { animation:sophie-hop-shadow 1.25s ease-in-out; }
+.is-hopping .companion-arm-right { animation:sophie-wave 1.25s ease-in-out; }
+.is-hopping .companion-forearm-right { animation:sophie-wave-elbow 1.25s ease-in-out; }
+.is-hopping .companion-skirt { animation:sophie-hop-skirt 1.25s ease-in-out; }
+.is-hopping .companion-shin-left,.is-hopping .companion-shin-right { animation:sophie-hop-knee 1.25s ease-in-out; }
+.is-hopping .companion-smile { opacity:0; }
+.is-hopping .companion-happy-mouth { opacity:1; }
+.is-paused:not(.is-hopping):not(.is-running) .companion-person * { animation:none!important; }
+@keyframes sophie-breathe { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-.6px); } }
+@keyframes sophie-look { 0%,25%,100% { transform:rotate(0); } 45%,65% { transform:rotate(1.8deg); } }
+@keyframes sophie-blink { 0%,94%,98%,100% { transform:scaleY(1); } 95.5%,96.5% { transform:scaleY(.12); } }
+@keyframes sophie-walk-leg { 0%,100% { transform:rotate(16deg); } 25% { transform:rotate(0); } 50% { transform:rotate(-16deg); } 75% { transform:rotate(0); } }
+@keyframes sophie-walk-knee { 0%,45%,100% { transform:rotate(0); } 65% { transform:rotate(28deg); } 85% { transform:rotate(12deg); } }
+@keyframes sophie-walk-foot { 0%,100% { transform:rotate(-8deg); } 35% { transform:rotate(5deg); } 65% { transform:rotate(-10deg); } }
+@keyframes sophie-arm-swing { 0%,100% { transform:rotate(-9deg); } 50% { transform:rotate(9deg); } }
+@keyframes sophie-walk-bob { 0%,50%,100% { transform:translateY(0); } 25%,75% { transform:translateY(-1.4px); } }
+@keyframes sophie-walk-sway { 0%,100% { transform:rotate(1.1deg); } 50% { transform:rotate(2.3deg); } }
+@keyframes sophie-head-lag { 0%,100% { transform:rotate(-.7deg); } 50% { transform:rotate(.7deg); } }
+@keyframes sophie-cloth-sway { 0%,100% { transform:rotate(-1.5deg); } 50% { transform:rotate(1.5deg); } }
+@keyframes sophie-hop {
+  0%,100% { transform:translateY(0) scale(1); }
+  16% { transform:translateY(3px) scale(1.03,.94); }
+  44%,54% { transform:translateY(-26px) scale(.98,1.02); }
+  78% { transform:translateY(0) scale(1.04,.95); }
+  90% { transform:translateY(-2px) scale(1); }
+}
+@keyframes sophie-hop-shadow { 0%,100% { transform:scaleX(1); opacity:.25; } 16%,78% { transform:scaleX(1.08); opacity:.3; } 44%,54% { transform:scaleX(.7); opacity:.12; } }
+@keyframes sophie-wave { 0%,100% { transform:rotate(0); } 20% { transform:rotate(-132deg); } 36%,64% { transform:rotate(-143deg); } 50%,76% { transform:rotate(-123deg); } }
+@keyframes sophie-wave-elbow { 0%,100% { transform:rotate(0); } 22%,50%,78% { transform:rotate(-16deg); } 36%,64% { transform:rotate(12deg); } }
+@keyframes sophie-hop-knee { 0%,16%,78%,100% { transform:rotate(0); } 44%,54% { transform:rotate(13deg); } }
+@keyframes sophie-hop-skirt { 0%,100% { transform:scaleX(1); } 44% { transform:scaleX(1.07) rotate(-2deg); } 64% { transform:scaleX(1.02) rotate(2deg); } }
 @media(max-width:850px) {
   .companion-stage-sidebar { padding-bottom:0; }
   .companion-perch-sidebar { display:none; }
