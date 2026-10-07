@@ -78,6 +78,9 @@ class BlogTests(unittest.TestCase):
         self.assertIn('<option value="food">Food featured</option>', page)
         self.assertIn('<option value="topic">Topic</option>', page)
         self.assertIn('id="result-count" role="status"', page)
+        self.assertIn('id="volume-by"', page)
+        for mode in ("year", "quarter", "month"):
+            self.assertIn(f'<option value="{mode}">By {mode}</option>', page)
 
     def test_life_album_is_independent_and_empty_until_photos_are_added(self):
         page = render_life([])

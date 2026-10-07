@@ -91,6 +91,12 @@ topics: ["Travel", "Restaurant discoveries"],
 
 Use `foods` for what is actually pictured and `topics` for what the story is about. An entry can have multiple tags in each group. Tags are assigned editorially while preparing each post; the site does not automatically analyze images or infer pictured foods from captions. Untagged posts remain visible under All entries and all-food/all-topic selections. The demo archive has example tags you can replace freely. Instagram exports do not include these custom tags: after importing, add them to the generated entries. Re-importing replaces `posts.js`, so preserve any custom edits from its backup.
 
+### Journal volumes
+
+“Browse volumes” organizes entries by **year**, **calendar quarter** (Q1 January–March, Q2 April–June, Q3 July–September, Q4 October–December), or **month**. Available volumes are generated from publication dates and listed newest-first with entry counts. No extra volume tags are needed. A selected volume can be combined with a food/topic filter and search; Clear filters resets everything.
+
+Dates can use `October 07, 2026` (the Instagram import format) or `2026-10-07`. Calendar boundaries do not change with the reader's time zone. Entries with missing, invalid, or unknown dates remain under All volumes, but are not assigned to an invented year or month.
+
 ## Life's snippets
 
 The separate `/life` album is for non-food photos. It starts empty: no stock images or food entries are presented as Sophie's life photos.
