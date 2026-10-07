@@ -40,12 +40,14 @@ Provider reference: [Resend Send Email API](https://resend.com/docs/api-referenc
 python3 -m unittest discover -s tests -v
 node --check app.js
 node --check newsletter.js
-node --test tests/companion.test.js
+node --test tests/companion*.test.js
 ```
 
 ## Little Sophie
 
 An optional illustrated companion visits reserved spots beside the hero, journal, mailing list, and article pages. Click her to wave/hop, take a little stroll, discover a random entry, or find the mailing list. Her jointed cartoon rig has knee bends, opposing arm swings, subtle breathing and blinking, and a hop with anticipation and a soft landing. Short walks stay grounded at a relaxed pace; moving between distant sections uses a soft fade instead of flying across article text. Pause and hide controls persist for the browser session; a small “Show little Sophie” button restores her. Pausing roaming still allows deliberate hop/stroll interactions. System reduced-motion preferences disable automatic movement and animated gestures. The character uses a small inline SVG, has no chat backend, and sends no user data anywhere.
+
+Sophie hides while the page scrolls or resizes and returns only after a safe perch is located. Her note's controls follow her button in keyboard Tab order; Escape closes the note and returns focus without scrolling the page.
 
 ## Import every Instagram post (recommended)
 

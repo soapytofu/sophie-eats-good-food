@@ -26,6 +26,7 @@
   let scrollTimer;
   let gestureTimer;
   let wanderTimer;
+  let viewportChanging = false;
   try {
     hidden = sessionStorage.getItem('sophie-companion-hidden') === 'yes';
     paused ||= sessionStorage.getItem('sophie-companion-paused') === 'yes';
@@ -55,7 +56,7 @@
   const companion = document.createElement('div');
   companion.className = 'sophie-companion';
   companion.innerHTML = `
-    <div class="companion-panel" id="companion-panel" hidden>
+    <div class="companion-panel" id="companion-panel" role="region" aria-label="Little Sophie's note" hidden>
       <button class="companion-close" aria-label="Close Sophie's note">×</button>
       <p class="companion-hello">Hi, I’m little Sophie ♡</p>
       <p class="companion-message"></p>
@@ -127,6 +128,12 @@
   const panel = companion.querySelector('.companion-panel');
   const message = companion.querySelector('.companion-message');
   const pauseButton = companion.querySelector('[data-action="pause"]');
+  // Forward Tab order is trigger → note controls, without trapping page navigation.
+  companion.append(panel);
+
+  function focusWithoutScrolling(element) {
+    element.focus({ preventScroll: true });
+  }
 
   function preferences() {
     companion.hidden = hidden;
@@ -177,7 +184,7 @@
     }
   }
   function position(wander = false, stroll = false) {
-    if (hidden || !panel.hidden) return;
+    if (hidden || !panel.hidden || viewportChanging) return;
     const candidates = perches.map(perch => ({ ...perch, ...rectangle(perch.element) }));
     // The heading is a mobile-only perch; the desktop sidebar has a dedicated spot.
     const visible = candidates.filter(perch => !(perch.name === 'journal' && innerWidth > 850));
@@ -243,14 +250,14 @@
     gestureTimer = setTimeout(() => companion.classList.remove('is-hopping'), 1300);
   }
   avatar.addEventListener('click', () => { setOpen(panel.hidden); if (!panel.hidden) hop(); });
-  companion.querySelector('.companion-close').addEventListener('click', () => { setOpen(false); avatar.focus(); position(); });
+  companion.querySelector('.companion-close').addEventListener('click', () => { setOpen(false); focusWithoutScrolling(avatar); position(); });
   companion.querySelector('[data-action="wave"]').addEventListener('click', hop);
   companion.querySelector('[data-action="stroll"]').addEventListener('click', () => {
     if (motion.matches) return;
     clearTimeout(gestureTimer);
     companion.classList.remove('is-hopping');
     setOpen(false);
-    avatar.focus();
+    focusWithoutScrolling(avatar);
     position(false, true);
   });
   pauseButton.addEventListener('click', () => {
@@ -265,25 +272,29 @@
     stopMovement();
     preferences();
     try { sessionStorage.setItem('sophie-companion-hidden', 'yes'); } catch {}
-    restore.focus();
+    focusWithoutScrolling(restore);
   });
   restore.addEventListener('click', () => {
     hidden = false;
     preferences();
     try { sessionStorage.removeItem('sophie-companion-hidden'); } catch {}
     position();
-    avatar.focus();
+    focusWithoutScrolling(avatar);
   });
   document.addEventListener('keydown', event => {
-    if (event.key === 'Escape' && !panel.hidden) { setOpen(false); avatar.focus(); position(); }
+    if (event.key === 'Escape' && !panel.hidden) { setOpen(false); focusWithoutScrolling(avatar); position(); }
   });
   document.addEventListener('click', event => {
     if (!panel.hidden && !companion.contains(event.target)) { setOpen(false); position(); }
   });
   function queuePosition() {
     if (!panel.hidden) setOpen(false);
+    // Fixed-position artwork must not stay over scrolling text at its old perch.
+    viewportChanging = true;
+    stopMovement();
+    companion.style.visibility = 'hidden';
     clearTimeout(scrollTimer);
-    scrollTimer = setTimeout(() => position(), 140);
+    scrollTimer = setTimeout(() => { viewportChanging = false; position(); }, 140);
   }
   window.addEventListener('scroll', queuePosition, { passive: true });
   window.addEventListener('resize', queuePosition);
@@ -294,7 +305,7 @@
   }
   // Don't keep animation timers alive when this page is leaving or in the back-forward cache.
   window.addEventListener('pagehide', () => { clearTimeout(wanderTimer); clearTimeout(scrollTimer); clearTimeout(gestureTimer); stopMovement(); });
-  window.addEventListener('pageshow', event => { if (event.persisted) { position(); wander(); } });
+  window.addEventListener('pageshow', event => { if (event.persisted) { viewportChanging = false; position(); wander(); } });
   preferences();
   position();
   window.addEventListener('load', () => position(), { once: true });
