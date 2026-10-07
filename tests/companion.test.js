@@ -1,6 +1,6 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { clampPoint, choosePerch } = require('../companion.js');
+const { clampPoint, choosePerch, movementPlan } = require('../companion.js');
 
 test('avatar remains inside both small and desktop viewports', () => {
   assert.deepEqual(clampPoint({ x: -50, y: -20 }, 320, 568), { x: 12, y: 12 });
@@ -15,4 +15,20 @@ test('only visible, entirely on-screen perches can be selected', () => {
   const far = { name: 'far', top: 10, bottom: 110 };
   assert.equal(choosePerch([hidden, offscreen, far, near], 900), near);
   assert.equal(choosePerch([hidden, offscreen], 900), undefined);
+});
+
+test('local walks have a natural pace instead of a rapid glide', () => {
+  const short = movementPlan({ x: 100, y: 100 }, { x: 130, y: 100 });
+  const longer = movementPlan({ x: 100, y: 100 }, { x: 220, y: 100 });
+  assert.equal(short.kind, 'walk');
+  assert.equal(short.duration, 750);
+  assert.equal(longer.kind, 'walk');
+  assert.ok(longer.duration > short.duration);
+  assert.ok(longer.duration < 1900);
+});
+
+test('large or vertical relocations do not fly through the article', () => {
+  assert.equal(movementPlan({ x: 100, y: 100 }, { x: 900, y: 400 }).kind, 'arrive');
+  assert.equal(movementPlan({ x: 100, y: 100 }, { x: 100, y: 180 }).kind, 'arrive');
+  assert.deepEqual(movementPlan({ x: 100, y: 100 }, { x: 102, y: 101 }), { kind: 'still', duration: 0 });
 });
