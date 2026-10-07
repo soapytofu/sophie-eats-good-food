@@ -78,6 +78,19 @@ Use `body` for an expanded blog story, or `caption` for the original complete te
 
 Instagram blocked unattended access to the public profile during this build, so the included six entries are clearly structured demo content rather than claims about the real account. Run the importer above to replace them with the exact archive.
 
+### Browse by food or topic
+
+The journal's “Find an entry” controls let readers choose **All entries**, **Food featured**, or **Topic**, then select a tag. Search works alongside that selection; clearing filters restores the full archive. Entries remain newest-first. Available choices and counts come from the posts themselves, not a fixed category list.
+
+Add optional arrays to each entry in `posts.js`, for example:
+
+```js
+foods: ["Pasta", "Seafood"],
+topics: ["Travel", "Restaurant discoveries"],
+```
+
+Use `foods` for what is actually pictured and `topics` for what the story is about. An entry can have multiple tags in each group. Tags are assigned editorially while preparing each post; the site does not automatically analyze images or infer pictured foods from captions. Untagged posts remain visible under All entries and all-food/all-topic selections. The demo archive has example tags you can replace freely. Instagram exports do not include these custom tags: after importing, add them to the generated entries. Re-importing replaces `posts.js`, so preserve any custom edits from its backup.
+
 ## Life's snippets
 
 The separate `/life` album is for non-food photos. It starts empty: no stock images or food entries are presented as Sophie's life photos.

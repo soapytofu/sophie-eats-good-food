@@ -74,6 +74,10 @@ class BlogTests(unittest.TestCase):
         self.assertIn('id="search" type="search"', page)
         self.assertNotIn('data-filter=', page)
         self.assertNotIn('aria-label="Filter posts"', page)
+        self.assertIn('id="browse-by"', page)
+        self.assertIn('<option value="food">Food featured</option>', page)
+        self.assertIn('<option value="topic">Topic</option>', page)
+        self.assertIn('id="result-count" role="status"', page)
 
     def test_life_album_is_independent_and_empty_until_photos_are_added(self):
         page = render_life([])

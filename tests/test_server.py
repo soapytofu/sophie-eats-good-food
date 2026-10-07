@@ -110,6 +110,7 @@ class ServerTests(unittest.TestCase):
         self.assertEqual(self.request("GET", "/companion.js")[0], 200)
         self.assertEqual(self.request("GET", "/gallery.css")[0], 200)
         self.assertEqual(self.request("GET", "/gallery.js")[0], 200)
+        self.assertEqual(self.request("GET", "/journal-filters.js")[0], 200)
 
     def test_direct_article_url_and_refresh_show_full_story(self):
         post = {"id": "specific entry", "title": "Lunch", "caption": "Opening.\n\nThe full story stays right here.", "image": "images/lunch.jpg"}
