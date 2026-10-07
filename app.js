@@ -1,8 +1,6 @@
 const grid = document.querySelector('#post-grid');
 const search = document.querySelector('#search');
-const filterButtons = [...document.querySelectorAll('[data-filter]')];
 const noResults = document.querySelector('#no-results');
-let activeFilter = 'all';
 const journalPosts = [...window.POSTS].sort((a, b) => (Date.parse(b.date) || 0) - (Date.parse(a.date) || 0));
 
 function escapeHtml(value) {
@@ -27,23 +25,14 @@ function journalEntry(post) {
 function render() {
   const query = search.value.trim().toLowerCase();
   const posts = journalPosts.filter(post => {
-    const inFilter = activeFilter === 'all' || post.category === activeFilter;
     const inSearch = `${post.title} ${post.body || ''} ${post.caption || ''} ${post.location || ''}`.toLowerCase().includes(query);
-    return inFilter && inSearch;
+    return inSearch;
   });
   grid.innerHTML = posts.map(journalEntry).join('');
   noResults.hidden = posts.length > 0;
 }
 
 search.addEventListener('input', render);
-filterButtons.forEach(button => button.addEventListener('click', () => {
-  activeFilter = button.dataset.filter;
-  filterButtons.forEach(item => {
-    item.classList.toggle('active', item === button);
-    item.setAttribute('aria-pressed', item === button);
-  });
-  render();
-}));
 document.querySelector('.menu-button').addEventListener('click', event => {
   const nav = document.querySelector('nav');
   const isOpen = nav.classList.toggle('open');

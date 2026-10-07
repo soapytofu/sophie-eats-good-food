@@ -64,9 +64,6 @@ h1 em { color:var(--sage); }
 .search-box { display:flex; align-items:center; margin:17px 0 13px; border:1px solid var(--line); border-radius:3px; padding:9px 11px; gap:8px; background:#fffcf7; }
 .search-box input { width:100%; min-width:0; border:0; background:transparent; color:var(--ink); outline:0; font-size:12px; }
 .search-box:focus-within { border-color:var(--sage); outline:1px solid var(--sage); }
-.filters { display:flex; flex-wrap:wrap; gap:9px 14px; }
-.filters button { border:0; border-bottom:1px solid transparent; padding:3px 0; color:var(--muted); background:transparent; font-size:11px; cursor:pointer; }
-.filters button.active,.filters button:hover { color:var(--sage); border-bottom-color:var(--sage); }
 .sidebar-recent { margin-top:32px; border-top:1px solid var(--line); padding-top:23px; }
 .sidebar-recent .eyebrow { font-size:9px; margin-bottom:14px; }
 .sidebar-recent ul { list-style:none; padding:0; margin:0; }

@@ -68,6 +68,12 @@ class BlogTests(unittest.TestCase):
         self.assertIn('href="/#journal"', page)
         self.assertIn('href="/#subscribe"', page)
 
+    def test_journal_keeps_search_without_category_buttons(self):
+        page = render_page("index.html")
+        self.assertIn('id="search" type="search"', page)
+        self.assertNotIn('data-filter=', page)
+        self.assertNotIn('aria-label="Filter posts"', page)
+
 
 if __name__ == "__main__":
     unittest.main()
