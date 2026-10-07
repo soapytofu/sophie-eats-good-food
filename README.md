@@ -30,6 +30,8 @@ The subscriber database and delivery queue live in `.newsletter/` and are exclud
 
 API keys, subscriber data, and preview email files are never served by the blog's HTTP server. Without the required delivery configuration, the real signup endpoint returns an unavailable message rather than reporting a successful subscription.
 
+If HTTPS is provided by a reverse proxy, set `TRUSTED_PROXY_IPS` to that proxy's exact connecting IP(s), separated by commas (for a local proxy, `127.0.0.1,::1`). Configure the proxy to overwrite `X-Forwarded-For` with the actual client IP, or append the actual client IP to the chain. The server reads that header only from configured proxies and walks the chain from the trusted end, so visitors retain separate signup limits without trusting forged headers. Leave this setting empty for direct access. Keep the backend private behind the proxy; never trust arbitrary visitor IPs or a proxy that forwards the header unchanged.
+
 Provider reference: [Resend Send Email API](https://resend.com/docs/api-reference/emails/send-email).
 
 ## Verification

@@ -3,13 +3,36 @@
 
 import argparse
 import html
+import ipaddress
 import json
+import os
 import threading
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlsplit, unquote
 
 from newsletter import Newsletter, ROOT
 from blog import render_post
+
+
+def parse_trusted_proxies(value):
+    """Trust only explicitly configured proxy IPs, never all incoming headers."""
+    return frozenset(ipaddress.ip_address(item.strip()) for item in value.split(",") if item.strip())
+
+
+def signup_client_ip(peer, forwarded_for, trusted_proxies=()):
+    """Walk a proxy-appended chain from the trusted end, ignoring spoofed prefixes."""
+    address = ipaddress.ip_address(peer)
+    if address not in trusted_proxies or not forwarded_for:
+        return str(address)
+    try:
+        chain = [ipaddress.ip_address(item.strip()) for item in forwarded_for.split(",")]
+    except ValueError:
+        return str(address)
+    for hop in reversed(chain):
+        address = hop
+        if address not in trusted_proxies:
+            break
+    return str(address)
 
 
 class BlogHandler(SimpleHTTPRequestHandler):
@@ -74,7 +97,8 @@ class BlogHandler(SimpleHTTPRequestHandler):
                     return self.respond(200, {"message": "Check your inbox for a confirmation link."})
                 if data.get("consent") is not True:
                     raise ValueError("Please check the box to receive new-post emails.")
-                message = self.server.newsletter.subscribe(data.get("email"), self.client_address[0])
+                client_ip = signup_client_ip(self.client_address[0], self.headers.get("X-Forwarded-For"), getattr(self.server, "trusted_proxies", ()))
+                message = self.server.newsletter.subscribe(data.get("email"), client_ip)
                 self.server.wakeup.set()
                 return self.respond(200, {"message": message})
             if path in ("/newsletter/confirm", "/newsletter/unsubscribe"):
@@ -150,6 +174,10 @@ def main():
     parser.add_argument("--bind", default="127.0.0.1")
     parser.add_argument("--preview", action="store_true", help="Save emails to a separate local outbox; never send them")
     args = parser.parse_args()
+    try:
+        trusted_proxies = parse_trusted_proxies(os.environ.get("TRUSTED_PROXY_IPS", ""))
+    except ValueError:
+        parser.error("TRUSTED_PROXY_IPS must contain comma-separated proxy IP addresses (no hostnames or CIDRs).")
     newsletter = Newsletter(preview=args.preview)
     if args.preview and args.bind not in {"127.0.0.1", "localhost", "::1"}:
         parser.error("Preview mode must only be served on localhost.")
@@ -161,6 +189,7 @@ def main():
     newsletter.discover(newsletter.read_posts())
     server = ThreadingHTTPServer((args.bind, args.port), BlogHandler)
     server.newsletter = newsletter
+    server.trusted_proxies = trusted_proxies
     server.wakeup, server.stopping = threading.Event(), threading.Event()
     worker = threading.Thread(target=work, args=(server,), daemon=True)
     worker.start()

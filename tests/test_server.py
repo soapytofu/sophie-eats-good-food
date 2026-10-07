@@ -8,7 +8,29 @@ from urllib.parse import urlencode
 from unittest.mock import patch
 
 from newsletter import Newsletter
-from server import BlogHandler
+from server import BlogHandler, parse_trusted_proxies, signup_client_ip
+
+
+class ProxyTests(unittest.TestCase):
+    def test_forwarded_headers_are_ignored_without_explicit_trust(self):
+        trusted = parse_trusted_proxies("127.0.0.1, ::1")
+        self.assertEqual(signup_client_ip("198.51.100.20", "203.0.113.10", trusted), "198.51.100.20")
+        self.assertEqual(signup_client_ip("127.0.0.1", "203.0.113.10"), "127.0.0.1")
+
+    def test_trusted_chain_ignores_spoofed_leftmost_address(self):
+        trusted = parse_trusted_proxies("127.0.0.1, 192.0.2.5")
+        self.assertEqual(signup_client_ip("127.0.0.1", "198.51.100.99, 203.0.113.10, 192.0.2.5", trusted), "203.0.113.10")
+
+    def test_invalid_headers_fall_back_to_peer_and_ipv6_is_supported(self):
+        trusted = parse_trusted_proxies("127.0.0.1, ::1")
+        for value in (None, "", "unknown", "203.0.113.10,", "203.0.113.10:1234"):
+            self.assertEqual(signup_client_ip("127.0.0.1", value, trusted), "127.0.0.1")
+        self.assertEqual(signup_client_ip("::1", "2001:db8::1234", trusted), "2001:db8::1234")
+
+    def test_invalid_proxy_configuration_is_rejected(self):
+        for value in ("*", "localhost", "0.0.0.0/0"):
+            with self.assertRaises(ValueError):
+                parse_trusted_proxies(value)
 
 
 class ServerTests(unittest.TestCase):
@@ -44,6 +66,25 @@ class ServerTests(unittest.TestCase):
         status, response = self.request("POST", "/api/subscribe", body, {"Content-Type": "application/json", "Origin": f"http://localhost:{self.server.server_port}"})
         self.assertEqual(status, 200)
         self.assertIn("Preview mode", response)
+
+    def test_proxy_readers_have_independent_signup_limits(self):
+        self.server.trusted_proxies = parse_trusted_proxies("127.0.0.1")
+        for number in range(1, 12):
+            body = json.dumps({"email": f"reader{number}@example.com", "consent": True})
+            headers = {"Content-Type": "application/json", "X-Forwarded-For": f"198.51.100.{number}"}
+            self.assertEqual(self.request("POST", "/api/subscribe", body, headers)[0], 200)
+        # A spoofed prefix must not let one reader evade their own limit.
+        for number in range(2, 11):
+            body = json.dumps({"email": f"repeat{number}@example.com", "consent": True})
+            headers = {"Content-Type": "application/json", "X-Forwarded-For": f"203.0.113.{number}, 198.51.100.1"}
+            self.assertEqual(self.request("POST", "/api/subscribe", body, headers)[0], 200)
+        self.assertEqual(self.request("POST", "/api/subscribe", body, headers)[0], 429)
+
+    def test_untrusted_forwarded_header_does_not_replace_peer(self):
+        body = json.dumps({"email": "reader@example.com", "consent": True})
+        with patch.object(self.newsletter, "subscribe", return_value="Preview mode") as subscribe:
+            self.request("POST", "/api/subscribe", body, {"Content-Type": "application/json", "X-Forwarded-For": "203.0.113.10"})
+            subscribe.assert_called_once_with("reader@example.com", "127.0.0.1")
 
     def test_email_links_do_not_change_state_until_form_is_submitted(self):
         self.newsletter.subscribe("reader@example.com", "127.0.0.1")
