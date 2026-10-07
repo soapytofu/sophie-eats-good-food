@@ -4,8 +4,10 @@
 import argparse
 import hashlib
 import json
+import os
 import re
 import shutil
+import tempfile
 from datetime import datetime
 from pathlib import Path
 
@@ -48,6 +50,28 @@ def extract_records(payload):
     return []
 
 
+def save_archive(output):
+    """Replace the archive atomically, keeping the previous version for recovery."""
+    archive = ROOT / "posts.js"
+    staged = backup = None
+    try:
+        with tempfile.NamedTemporaryFile(mode="w", encoding="utf-8", dir=ROOT, delete=False) as file:
+            staged = Path(file.name)
+            file.write(output)
+            file.flush()
+            os.fsync(file.fileno())
+        if archive.exists():
+            with tempfile.NamedTemporaryFile(dir=ROOT, delete=False) as file:
+                backup = Path(file.name)
+            shutil.copy2(archive, backup)
+            os.replace(backup, ROOT / "posts.js.bak")
+        os.replace(staged, archive)
+    finally:
+        for path in (staged, backup):
+            if path:
+                path.unlink(missing_ok=True)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("export", type=Path, help="Unzipped Instagram export folder")
@@ -76,15 +100,9 @@ def main():
             timestamp = primary.get("creation_timestamp") or record.get("creation_timestamp") or 0
             date = datetime.fromtimestamp(timestamp).strftime("%B %d, %Y") if timestamp else "From Instagram"
             source_uri = primary.get("uri", "")
-            source = export_dir / source_uri
-            if not source.exists():
-                source = json_file.parent / source_uri
-            if not source.exists() or source.suffix.lower() not in {".jpg", ".jpeg", ".png", ".webp"}:
-                continue
 
             # Stable IDs prevent re-imports from generating duplicate newsletter announcements.
             post_id = "ig-" + hashlib.sha256(f"{source_uri}:{timestamp}".encode()).hexdigest()[:20]
-            destination = output_images / f"{post_id}{source.suffix.lower()}"
             # Keep every photo in a carousel, not only its cover image.
             photos = []
             for media_index, media in enumerate(media_items):
@@ -97,6 +115,8 @@ def main():
                 media_destination = output_images / f"{post_id}{suffix}{media_source.suffix.lower()}"
                 shutil.copy2(media_source, media_destination)
                 photos.append({"image": media_destination.relative_to(ROOT).as_posix(), "alt": make_title(caption, "A food moment")})
+            if not photos:
+                continue
 
             title = make_title(caption, f"A good food moment #{len(posts)+1}")
             excerpt = re.sub(r"\s+", " ", caption).strip()
@@ -109,7 +129,7 @@ def main():
                 "category": "story" if is_story else "restaurant",
                 "categoryLabel": "Instagram Story" if is_story else "From Instagram",
                 "location": "",
-                "image": destination.relative_to(ROOT).as_posix(),
+                "image": photos[0]["image"],
                 "photos": photos,
                 "alt": title,
                 "excerpt": excerpt or "A delicious moment from the feed.",
@@ -117,9 +137,11 @@ def main():
                 "instagramUrl": "https://www.instagram.com/sophieeatsgoodfood/",
             })
 
+    if not posts:
+        raise SystemExit("No supported photos were imported. The existing archive was left unchanged. Check that the export includes its media files.")
     posts.sort(key=lambda post: datetime.strptime(post["date"], "%B %d, %Y") if post["date"] != "From Instagram" else datetime.min, reverse=True)
     output = "// Generated from Sophie's official Instagram export.\nwindow.POSTS = " + json.dumps(posts, ensure_ascii=False, indent=2) + ";\n"
-    (ROOT / "posts.js").write_text(output, encoding="utf-8")
+    save_archive(output)
     print(f"Imported {len(posts)} posts/stories and their photos into {ROOT}")
 
 

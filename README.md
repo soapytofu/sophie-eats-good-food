@@ -57,6 +57,8 @@ python3 import_instagram.py /path/to/unzipped-instagram-export
 
 The importer finds feed posts and archived Stories, copies all supported photos (including carousel photos) into `images/instagram`, preserves the available text and date, and regenerates the complete site archive. Stories only appear in an export when Instagram retained them in your Story Archive. Videos and text embedded inside images are not converted to written blog text.
 
+Mixed video/photo carousels use their first supported photo as the cover. Imports with no usable photos stop without replacing the current archive. Successful imports replace `posts.js` atomically and save its previous version as `posts.js.bak`; keep that backup until you have checked the imported entries.
+
 ## Add a post manually
 
 Each post is an object in `posts.js`. Add the original Instagram photo to an `images/` directory, copy the full caption, date, location, and original post URL into a new object, and it will automatically become a searchable/filterable blog article.
