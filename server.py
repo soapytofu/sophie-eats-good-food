@@ -161,7 +161,7 @@ class BlogHandler(SimpleHTTPRequestHandler):
             return None
         relative = "index.html" if path == "/" else path.lstrip("/")
         target = (ROOT / relative).resolve()
-        public = {"index.html", "styles.css", "app.js", "newsletter.js", "posts.js", "companion.js", "companion.css", "gallery.css", "gallery.js"}
+        public = {"index.html", "styles.css", "app.js", "newsletter.js", "posts.js", "companion.js", "companion.css", "gallery.css", "gallery.js", "journal-filters.js"}
         image = relative.startswith("images/") and target.suffix.lower() in {".jpg", ".jpeg", ".png", ".webp", ".gif", ".avif"}
         if not target.is_relative_to(ROOT) or (relative not in public and not image) or not target.is_file():
             self.send_error(404)

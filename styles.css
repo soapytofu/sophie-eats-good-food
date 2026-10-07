@@ -4,7 +4,7 @@ html { scroll-behavior:smooth; scroll-padding-top:28px; }
 body { margin:0; background:var(--cream); color:var(--ink); font-family:"DM Sans",sans-serif; font-size:15px; }
 a { color:inherit; text-decoration:none; }
 img { display:block; width:100%; }
-button,input { font:inherit; }
+button,input,select { font:inherit; }
 button,a,input,summary { -webkit-tap-highlight-color:transparent; }
 :focus-visible { outline:2px solid var(--sage); outline-offset:5px; }
 .grain { position:fixed; inset:0; opacity:.018; pointer-events:none; z-index:100; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
@@ -64,6 +64,16 @@ h1 em { color:var(--sage); }
 .search-box { display:flex; align-items:center; margin:17px 0 13px; border:1px solid var(--line); border-radius:3px; padding:9px 11px; gap:8px; background:#fffcf7; }
 .search-box input { width:100%; min-width:0; border:0; background:transparent; color:var(--ink); outline:0; font-size:12px; }
 .search-box:focus-within { border-color:var(--sage); outline:1px solid var(--sage); }
+.browse-fields { margin-top:18px; }
+.browse-fields label { display:block; font-size:12px; color:var(--muted); margin-bottom:7px; }
+.browse-fields select { display:block; width:100%; min-width:0; padding:10px 8px; border:1px solid var(--line); border-radius:3px; color:var(--ink); background:#fffcf7; font-size:13px; }
+#browse-value-field { margin-top:14px; }
+.browse-note { font-size:12px; color:var(--muted); line-height:1.7; }
+.browse-note:empty { display:none; }
+.browse-status { display:flex; flex-wrap:wrap; align-items:center; gap:12px; margin-top:12px; font-size:12px; color:var(--muted); }
+.browse-status p { margin:0; }
+.browse-status button { border:0; padding:4px 0; background:transparent; color:var(--sage); text-decoration:underline; text-underline-offset:3px; cursor:pointer; font-size:12px; }
+.browse-status button[hidden] { display:none; }
 .sidebar-recent { margin-top:32px; border-top:1px solid var(--line); padding-top:23px; }
 .sidebar-recent .eyebrow { font-size:9px; margin-bottom:14px; }
 .sidebar-recent ul { list-style:none; padding:0; margin:0; }
@@ -167,6 +177,7 @@ footer > div > p { font-size:12px; line-height:1.8; margin:12px 0 0; }
   .journal-browse { margin:0; }
   .journal-browse summary { font-size:14px; }
   .journal-browse .search-box { max-width:360px; }
+  .browse-fields { max-width:360px; }
   .section-heading { padding-top:24px; }
   .newsletter { gap:30px; padding:36px; }
   .newsletter-input-row { flex-direction:column; }

@@ -1,6 +1,12 @@
 const grid = document.querySelector('#post-grid');
 const search = document.querySelector('#search');
 const noResults = document.querySelector('#no-results');
+const browseBy = document.querySelector('#browse-by');
+const browseValue = document.querySelector('#browse-value');
+const browseValueLabel = document.querySelector('#browse-value-label');
+const browseValueField = document.querySelector('#browse-value-field');
+const resultCount = document.querySelector('#result-count');
+const resetBrowse = document.querySelector('#reset-browse');
 const journalPosts = [...window.POSTS].sort((a, b) => (Date.parse(b.date) || 0) - (Date.parse(a.date) || 0));
 
 function escapeHtml(value) {
@@ -23,16 +29,35 @@ function journalEntry(post) {
 }
 
 function render() {
-  const query = search.value.trim().toLowerCase();
-  const posts = journalPosts.filter(post => {
-    const inSearch = `${post.title} ${post.body || ''} ${post.caption || ''} ${post.location || ''}`.toLowerCase().includes(query);
-    return inSearch;
+  const posts = window.JournalFilters.filterPosts(journalPosts, {
+    query: search.value, mode: browseBy.value, value: browseValue.value,
   });
   grid.innerHTML = posts.map(journalEntry).join('');
   noResults.hidden = posts.length > 0;
+  resultCount.textContent = `${posts.length} of ${journalPosts.length} ${journalPosts.length === 1 ? 'entry' : 'entries'}`;
+  resetBrowse.hidden = !search.value && browseBy.value === 'all';
+}
+
+function updateBrowse() {
+  const mode = browseBy.value;
+  browseValueField.hidden = mode === 'all';
+  browseValueLabel.textContent = mode === 'food' ? 'Food featured' : 'Topic';
+  const choices = window.JournalFilters.options(journalPosts, mode);
+  const allLabel = mode === 'food' ? 'All foods' : 'All topics';
+  browseValue.innerHTML = `<option value="">${allLabel}</option>` + choices.map(option =>
+    `<option value="${escapeHtml(option.value)}">${escapeHtml(option.label)} (${option.count})</option>`).join('');
+  document.querySelector('#browse-note').textContent = mode !== 'all' && !choices.length
+    ? `No ${mode === 'food' ? 'food' : 'topic'} tags yet. All entries are shown.` : '';
+  render();
 }
 
 search.addEventListener('input', render);
+browseBy.addEventListener('change', updateBrowse);
+browseValue.addEventListener('change', render);
+resetBrowse.addEventListener('click', () => {
+  search.value = ''; browseBy.value = 'all'; updateBrowse();
+  search.focus({ preventScroll: true });
+});
 document.querySelector('.menu-button').addEventListener('click', event => {
   const nav = document.querySelector('nav');
   const isOpen = nav.classList.toggle('open');
@@ -42,7 +67,7 @@ document.querySelectorAll('.site-header nav a').forEach(link => link.addEventLis
   document.querySelector('.site-header nav').classList.remove('open');
   document.querySelector('.menu-button').setAttribute('aria-expanded', 'false');
 }));
-render();
+updateBrowse();
 document.querySelector('#recent-posts').innerHTML = journalPosts.slice(0, 3).map(post => `<li><a href="/posts/${encodeURIComponent(post.id)}">${escapeHtml(post.title)}</a><span>${escapeHtml(post.date)}</span></li>`).join('');
 
 function openLinkedPost() {
