@@ -36,17 +36,14 @@
 .companion-head { transform-origin:42px 43px; animation:sophie-look 6.5s ease-in-out infinite; }
 .companion-eyes { transform-origin:42px 30px; animation:sophie-blink 7s linear infinite; }
 .companion-happy-mouth { opacity:0; }
-.companion-leg-left { transform-origin:35px 75px; }
-.companion-leg-right { transform-origin:49px 75px; }
+.companion-leg-left,.companion-leg-right { transform-origin:42px 70px; }
 .companion-shin-left { transform-origin:35px 84px; }
 .companion-shin-right { transform-origin:49px 84px; }
-.companion-foot-left { transform-origin:35px 90px; }
-.companion-foot-right { transform-origin:49px 90px; }
-.companion-arm-left { transform-origin:29px 51px; }
-.companion-arm-right { transform-origin:55px 51px; }
+.companion-foot-left { transform-origin:35px 93px; }
+.companion-foot-right { transform-origin:49px 93px; }
+.companion-arm-left,.companion-arm-right { transform-origin:42px 49px; }
 .companion-forearm-left { transform-origin:23px 60px; }
 .companion-forearm-right { transform-origin:61px 60px; }
-.companion-skirt { transform-origin:42px 58px; }
 .companion-bangs { transform-origin:42px 12px; }
 .companion-shadow { transform-origin:42px 96px; }
 .is-running .companion-person { animation:sophie-walk-bob .76s ease-in-out infinite; }
@@ -57,12 +54,11 @@
 .is-running .companion-foot-left,.is-running .companion-foot-right { animation:sophie-walk-foot .76s linear infinite; }
 .is-running .companion-arm-left,.is-running .companion-arm-right { animation:sophie-arm-swing .76s ease-in-out infinite; }
 .is-running .companion-leg-right,.is-running .companion-shin-right,.is-running .companion-foot-right,.is-running .companion-arm-left { animation-delay:-.38s; }
-.is-running .companion-skirt,.is-running .companion-bangs { animation:sophie-cloth-sway .76s ease-in-out infinite; }
+.is-running .companion-bangs { animation:sophie-cloth-sway .76s ease-in-out infinite; }
 .is-hopping .companion-person { animation:sophie-hop 1.25s ease-in-out; }
 .is-hopping .companion-shadow { animation:sophie-hop-shadow 1.25s ease-in-out; }
 .is-hopping .companion-arm-right { animation:sophie-wave 1.25s ease-in-out; }
 .is-hopping .companion-forearm-right { animation:sophie-wave-elbow 1.25s ease-in-out; }
-.is-hopping .companion-skirt { animation:sophie-hop-skirt 1.25s ease-in-out; }
 .is-hopping .companion-shin-left,.is-hopping .companion-shin-right { animation:sophie-hop-knee 1.25s ease-in-out; }
 .is-hopping .companion-smile { opacity:0; }
 .is-hopping .companion-happy-mouth { opacity:1; }
@@ -89,7 +85,6 @@
 @keyframes sophie-wave { 0%,100% { transform:rotate(0); } 20% { transform:rotate(-132deg); } 36%,64% { transform:rotate(-143deg); } 50%,76% { transform:rotate(-123deg); } }
 @keyframes sophie-wave-elbow { 0%,100% { transform:rotate(0); } 22%,50%,78% { transform:rotate(-16deg); } 36%,64% { transform:rotate(12deg); } }
 @keyframes sophie-hop-knee { 0%,16%,78%,100% { transform:rotate(0); } 44%,54% { transform:rotate(13deg); } }
-@keyframes sophie-hop-skirt { 0%,100% { transform:scaleX(1); } 44% { transform:scaleX(1.07) rotate(-2deg); } 64% { transform:scaleX(1.02) rotate(2deg); } }
 @media(max-width:850px) {
   .companion-stage-sidebar { padding-bottom:0; }
   .companion-perch-sidebar { display:none; }
