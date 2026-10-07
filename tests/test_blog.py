@@ -78,6 +78,7 @@ class BlogTests(unittest.TestCase):
     def test_journal_keeps_search_without_category_buttons(self):
         page = render_page("index.html")
         self.assertIn('id="search" type="search"', page)
+        self.assertIn('placeholder="Search the journal" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false"', page)
         self.assertNotIn('data-filter=', page)
         self.assertNotIn('aria-label="Filter posts"', page)
         self.assertIn('id="browse-by"', page)
